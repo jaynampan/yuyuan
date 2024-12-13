@@ -8,6 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tab_icon_color_on">#000000</color>
+    <color name="lesson_green">#17db8f</color>
+    <color name="lesson_progress_bg">#e5e5e5</color>
+    <color name="lesson_gray_dark">#ababab</color>
     <color name="tab_icon_color_off">#808080</color>
     <color name="bg_light_gray">#f8f8f8</color>
     <color name="common_gray">#bdbdbd</color>

@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Yuyuan</string>
+    <string name="tab_title0">Word</string>
+    <string name="tab_title1">Learn</string>
+    <string name="tab_title2">Me</string>
     <string name="btn_continue">CONTINUE</string>
-    <string name="lessons">Lessons</string>
+    <string name="lesson_title">Lessons</string>
     <string name="unit1">Ordering Food</string>
     <string name="more">more</string>
     <string name="unit1_lesson1">Ordering latte</string>
@@ -94,4 +97,5 @@
     <string name="plan_finished">Today\'s plan Finished</string>
     <string name="default_calendar_month">Aug</string>
     <string name="default_calendar_date">August 10th</string>
+    <string name="load_plan_info_err">Can\'t update plan info</string>
 </resources>

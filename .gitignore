@@ -31,3 +31,10 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Emulator File
+emu.bat
+
+# Project's Temp files
+/store/
+/.kotlin/

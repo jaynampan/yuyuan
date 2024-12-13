@@ -1,16 +1,27 @@
+import com.google.protobuf.gradle.id
+
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.androidx.room)
+    id("com.google.protobuf") version "0.9.4"
 }
 
+
+
 android {
-    namespace = "com.chotix.yuyuan"
-    compileSdk = 33
+
+    namespace = "meow.softer.yuyuan"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.chotix.yuyuan"
+        applicationId = "meow.softer.yuyuan"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -18,17 +29,22 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -39,38 +55,79 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
 
-    //implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    //implementation("androidx.compose.ui:ui")
-    //implementation("androidx.compose.ui:ui-graphics")
-    //implementation("androidx.compose.ui:ui-tooling-preview")
-    //implementation("androidx.compose.material3:material3")
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    //androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    //androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    //debugImplementation("androidx.compose.ui:ui-tooling")
-    //debugImplementation("androidx.compose.ui:ui-test-manifest")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 
     //lib
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.activity:activity-ktx:1.7.2")
-    implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation(libs.material)
+    implementation(libs.activity.ktx)
+    implementation(libs.circleimageview)
+    implementation(libs.constraintlayout.compose)
+    //Splash Screen
+    implementation(libs.core.splashscreen)
+    //Navigation
+    implementation(libs.navigation.compose)
+    // Hilt
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    // Room
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    // optional - Test helpers
+    testImplementation(libs.room.testing)
+    // DataStore
+    implementation(libs.datastore)
+    implementation(libs.protobuf.javalite)
 
+}
+// might have lint warns
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.21.9"
+    }
 
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                id("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+// Set Room Schema export location
+room {
+    schemaDirectory("$projectDir/schemas")
 }
