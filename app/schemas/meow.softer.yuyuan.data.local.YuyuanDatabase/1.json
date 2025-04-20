@@ -35,8 +35,7 @@
           {
             "fieldPath": "charJsonFile",
             "columnName": "char_json_file",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "meaning",
@@ -101,8 +100,7 @@
           {
             "fieldPath": "bookDescription",
             "columnName": "book_description",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "bookIconFile",
@@ -122,9 +120,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "sentences",
@@ -233,7 +229,6 @@
             "id"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "users",
@@ -272,7 +267,6 @@
             "word_id"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "daily_plan",
@@ -321,7 +315,6 @@
             "id"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "books",
@@ -373,8 +366,7 @@
           {
             "fieldPath": "timeLearned",
             "columnName": "time_learned",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -421,7 +413,6 @@
         ]
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
       "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '58944590a331a22333d6fada318dd1db')"

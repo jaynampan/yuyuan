@@ -3,7 +3,7 @@ package meow.softer.yuyuan.data.repository.wordstatus
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.data.local.entiity.WordStatus
-import meow.softer.yuyuan.data.repository.setting.DefaultUserId
+import meow.softer.yuyuan.data.repository.dailyplan.DefaultUserId
 import java.time.ZonedDateTime
 
 /**

@@ -81,4 +81,12 @@ interface WordStatusDao {
         LIMIT :limit
         """)
     fun getRandomNewWordIdsByBook(bookId: Int, limit: Int, userId: Int): List<Int>
+
+    @Query("""
+        select max(w.id) from words as w 
+        join word_status as s 
+        on s.word_id = w.id 
+        where w.book_id = :bookId and s.is_learnt = 1
+    """)
+    fun getNewestLearntWordIdByBook(bookId: Int):Int
 }

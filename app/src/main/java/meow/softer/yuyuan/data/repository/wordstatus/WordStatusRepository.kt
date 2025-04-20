@@ -128,4 +128,10 @@ class WordStatusRepository @Inject constructor(
             wordStatusDao.getRandomNewWordIdsByBook(bookId, limit, userId)
         }
     }
+
+    suspend fun getNewestLearntWordIdByBook(bookId: Int):Result<Int>{
+        return  runInBackground {
+            wordStatusDao.getNewestLearntWordIdByBook(bookId)
+        }
+    }
 }

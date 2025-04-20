@@ -32,10 +32,10 @@ import androidx.room.PrimaryKey
     indices = [Index(value = arrayOf("book_id"))]
 )
 data class Word(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val character: String,
     val pinyin: String,
-    @ColumnInfo(name = "char_audio_file") val charAudioFile: String,
+    @ColumnInfo(name = "char_audio_file") val audioFile: String,
     @ColumnInfo(name = "char_json_file") val charJsonFile: String?,
     val meaning: String,
     @ColumnInfo(name = "book_id") val bookId: Int

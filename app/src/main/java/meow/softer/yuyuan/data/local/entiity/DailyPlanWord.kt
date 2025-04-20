@@ -7,8 +7,8 @@ import androidx.room.ForeignKey
 /**
  * CREATE TABLE [daily_plan_words](
  *   [daily_plan_id] INTEGER NOT NULL REFERENCES [daily_plan]([id]),
- *   [word_id] INTEGER NOT NULL REFERENCES [words]([word_id]),
- *   PRIMARY KEY([daily_plan_id], [word_id]));
+ *   word_id INTEGER NOT NULL REFERENCES [words]([word_id]),
+ *   PRIMARY KEY(daily_plan_id, word_id));
  *
  */
 @Entity(

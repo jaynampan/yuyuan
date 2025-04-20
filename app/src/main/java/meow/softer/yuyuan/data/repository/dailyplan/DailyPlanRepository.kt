@@ -29,7 +29,7 @@ class DailyPlanRepository @Inject constructor(
         )
         val id = dailyPlanDao.insert(dailyPlan)
         return if (id > 0) {
-            Result.Success(dailyPlan)
+            Result.Success(dailyPlanDao.getById(id.toInt()))
         } else {
             Result.Error(IllegalStateException("insert returned invalid id "))
         }

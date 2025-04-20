@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -40,10 +43,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,33 +54,66 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import meow.softer.yuyuan.R
-import meow.softer.yuyuan.ui.theme.noRippleClickable
+import meow.softer.yuyuan.domain.BookInfo
+import meow.softer.yuyuan.ui.navigation.Calendar
+import meow.softer.yuyuan.ui.navigation.Inbox
+import meow.softer.yuyuan.ui.navigation.Playground
+import meow.softer.yuyuan.ui.navigation.Search
+import meow.softer.yuyuan.ui.navigation.Setting
 
 /**
  * the first screen when app is launched
  */
 @Composable
-fun HomeScreen(
-    homeViewModel: HomeViewModel,
-    onButtonClick: () -> Unit
+fun HomeScreenOld(
+    homeViewModelOld: HomeViewModelOld,
+    onRouteClick: (String) -> Unit
 ) {
-    val uiState = homeViewModel.uiState.collectAsStateWithLifecycle()
-    HomeScreenContent(
+    val uiState = homeViewModelOld.uiState.collectAsStateWithLifecycle()
+    HomeScreenContentOld(
         uiState = uiState.value,
-        onButtonClick = onButtonClick
+        onRouteClick = onRouteClick
     )
 }
 
 @Composable
-fun HomeScreenContent(
-    uiState: HomeUiState,
-    onButtonClick: () -> Unit
+fun HomeScreen(
+    mainViewModel: MainViewModel,
+    onRouteClick: (String) -> Unit
+) {
+    val mainUiState = mainViewModel.mainUiState.collectAsStateWithLifecycle()
+    val homeUiState = when (mainUiState.value) {
+        is MainUiState.NoData -> null
+        is MainUiState.HasData -> (mainUiState.value as MainUiState.HasData).homeUiState
+    }
+    //TODO: loading
+    if (homeUiState != null) {
+        HomeScreenContent(
+            bookInfo = homeUiState.currentBook,
+            onRouteClick = { onRouteClick(it) }
+        )
+    } else {
+        Box(
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
+
+            Text("Loading.....")
+        }
+
+    }
+
+}
+
+@Composable
+fun HomeScreenContentOld(
+    uiState: HomeUiStateOld,
+    onRouteClick: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = colorResource(id = R.color.bg_light_gray))
+            .background(color = Color.Gray)
     ) {
         //create refs for the components
         val (header, body) = createRefs()
@@ -97,7 +133,7 @@ fun HomeScreenContent(
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .noRippleClickable { handleClick("calendar") }
+                    .clickable { onRouteClick(Calendar.route) }
             )
             HomeSearchView(
                 modifier = Modifier
@@ -105,9 +141,9 @@ fun HomeScreenContent(
                     .width(100.dp)
                     .weight(1f)
                     .padding(start = 10.dp, end = 10.dp)
-                    .clickable { handleClick("search") }
+                    .clickable { onRouteClick(Search.route) }
                     .background(
-                        color = colorResource(id = R.color.common_gray),
+                        color = Color.Gray,
                         shape = RoundedCornerShape(16.dp)
                     )
 
@@ -119,7 +155,7 @@ fun HomeScreenContent(
                 contentDescription = null,
                 modifier = Modifier
                     .size(25.dp)
-                    .noRippleClickable { handleClick("message") }
+                    .clickable { onRouteClick(Inbox.route) }
             )
         }
         Column(
@@ -132,52 +168,62 @@ fun HomeScreenContent(
         ) {
             HomeMainCard(
                 uiState = uiState,
-                onButtonClick = onButtonClick
+                onButtonClick = onRouteClick
             )
             HomePracticeCard()
         }
     }
 }
 
-fun handleClick(
-    id: String
+
+@Composable
+fun HomeScreenContent(
+    bookInfo: BookInfo,
+    onRouteClick: (String) -> Unit
 ) {
-    when (id) {
-        "calendar" -> run {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HomeMainCardV1(
+            bookInfo = bookInfo,
+            onButtonClick = { onRouteClick(it) }
+        )
+        Spacer(
+            modifier = Modifier.weight(1F)
+        )
+        Text(
+            modifier = Modifier
+                .clickable { onRouteClick(Setting.route) },
+            text = "Change Book & Speed",
+            color = MaterialTheme.colorScheme.secondary,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(
+            modifier = Modifier.height(100.dp)
+        )
 
-        }
-
-        "book" -> run {
-
-        }
-
-        "change" -> run {
-
-        }
-
-        "start" -> run {
-
-        }
     }
+
 }
+
 
 @Composable
 private fun BookCard(
-    uiState: HomeUiState
+    uiState: HomeUiStateOld
 ) {
     val bookName: String
-    val learntWords: Int
-    val totalWords: Int
+    var learntWords = 0
+    var totalWords = 1
     val daysLeft: Int
     val progress: String
     when (uiState) {
-        is HomeUiState.NoPlan -> {
+        is HomeUiStateOld.NoPlan -> {
             bookName = ""
             daysLeft = 0
             progress = ""
         }
 
-        is HomeUiState.HasPLan -> {
+        is HomeUiStateOld.HasPLan -> {
             bookName = uiState.planInfo.currentBook.bookName
             learntWords = uiState.planInfo.currentBook.learntWords
             totalWords = uiState.planInfo.currentBook.totalWords
@@ -214,7 +260,7 @@ private fun BookCard(
             Text(
                 text = stringResource(id = R.string.change_book),
                 fontSize = 12.sp,
-                color = colorResource(id = R.color.gray_dark),
+                color = Color.Gray,
                 modifier = Modifier
                     .padding(start = 5.dp)
                     .constrainAs(changeText) {
@@ -225,9 +271,9 @@ private fun BookCard(
             LinearProgressIndicator(
                 gapSize = (-1).dp,
                 drawStopIndicator = {},
-                progress = { updateProgress() },
-                color = colorResource(id = R.color.blue_progress),
-                trackColor = colorResource(id = R.color.common_gray),
+                progress = { (learntWords / totalWords).toFloat() },
+                color = Color.Blue,
+                trackColor = Color.Gray,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 4.dp, bottom = 4.dp)
@@ -238,9 +284,8 @@ private fun BookCard(
             )
 
             Text(
-
                 text = progress,
-                color = colorResource(id = R.color.gray_light),
+                color = Color.LightGray,
                 fontSize = 11.sp,
                 modifier = Modifier
                     .constrainAs(progressText) {
@@ -250,7 +295,7 @@ private fun BookCard(
             )
             Text(
                 text = "$daysLeft days left",
-                color = colorResource(id = R.color.gray_light),
+                color = Color.LightGray,
                 fontSize = 11.sp,
                 modifier = Modifier
                     .constrainAs(daysText) {
@@ -263,21 +308,80 @@ private fun BookCard(
     }
 }
 
-private fun updateProgress(): Float {
-    return 0.5f
+@Composable
+private fun BookCardV1(
+    bookInfo: BookInfo,
+) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp)
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_book_60_purple),
+            contentDescription = null,
+            modifier = Modifier,
+            tint = MaterialTheme.colorScheme.primary
+        )
+
+        ConstraintLayout(
+
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            val (bookNameElem, progressText, progressBar) = createRefs()
+            Text(
+                text = bookInfo.bookName,
+                fontSize = 15.sp,
+                modifier = Modifier
+                    .constrainAs(bookNameElem) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+            )
+
+            LinearProgressIndicator(
+                gapSize = (-1).dp,
+                drawStopIndicator = {},
+                progress = { (bookInfo.learntWords / bookInfo.totalWords).toFloat() },
+                color = Color.Blue,
+                trackColor = Color.Gray,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, bottom = 4.dp)
+                    .constrainAs(progressBar) {
+                        start.linkTo(parent.start)
+                        top.linkTo(bookNameElem.bottom)
+                    }
+            )
+            Text(
+                text = "${bookInfo.learntWords} / ${bookInfo.totalWords}",
+                color = Color.LightGray,
+                fontSize = 11.sp,
+                modifier = Modifier
+                    .constrainAs(progressText) {
+                        start.linkTo(parent.start)
+                        top.linkTo(progressBar.bottom)
+                    }
+            )
+
+        }
+    }
 }
 
+
 @Composable
-private fun PlanCard(uiState: HomeUiState, onButtonClick: () -> Unit) {
+private fun PlanCard(uiState: HomeUiStateOld, onButtonClick: (String) -> Unit) {
     val toLearn =
         when (uiState) {
-            is HomeUiState.NoPlan -> 0
-            is HomeUiState.HasPLan -> uiState.planInfo.toLearnAmount
+            is HomeUiStateOld.NoPlan -> 0
+            is HomeUiStateOld.HasPLan -> uiState.planInfo.toLearnAmount
         }
     val toReview =
         when (uiState) {
-            is HomeUiState.NoPlan -> 0
-            is HomeUiState.HasPLan -> uiState.planInfo.toReviewAmount
+            is HomeUiStateOld.NoPlan -> 0
+            is HomeUiStateOld.HasPLan -> uiState.planInfo.toReviewAmount
         }
     Column(
         modifier = Modifier
@@ -329,11 +433,11 @@ private fun PlanCard(uiState: HomeUiState, onButtonClick: () -> Unit) {
         }
         Button(
             onClick = {
-                onButtonClick()
+                onButtonClick(Playground.route)
             },
             shape = RoundedCornerShape(10.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(id = R.color.blue_dark)
+                containerColor = Color.Blue
             ),
             modifier = Modifier
                 .padding(top = 5.dp)
@@ -352,9 +456,31 @@ private fun PlanCard(uiState: HomeUiState, onButtonClick: () -> Unit) {
 }
 
 @Composable
+private fun PlanCardV1(onStart: (String) -> Unit) {
+    Button(
+        onClick = {
+            onStart(Playground.route)
+        },
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .padding(top = 5.dp)
+            .fillMaxWidth()
+
+    ) {
+        Text(
+            text = stringResource(id = R.string.btn_start_to_learn),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier
+
+        )
+    }
+}
+
+@Composable
 private fun HomeMainCard(
-    uiState: HomeUiState,
-    onButtonClick: () -> Unit
+    uiState: HomeUiStateOld,
+    onButtonClick: (String) -> Unit
 ) {
 
     Box(
@@ -374,7 +500,7 @@ private fun HomeMainCard(
         ) {
             BookCard(uiState = uiState)
             HorizontalDivider(
-                color = colorResource(id = R.color.color_divider_white),
+                color = Color.White,
                 thickness = 1.dp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -383,6 +509,40 @@ private fun HomeMainCard(
             PlanCard(
                 uiState = uiState,
                 onButtonClick = onButtonClick
+            )
+        }
+    }
+
+
+}
+
+@Composable
+private fun HomeMainCardV1(
+    bookInfo: BookInfo,
+    onButtonClick: (String) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 100.dp, start = 15.dp, end = 15.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(start = 10.dp, end = 10.dp)
+
+        ) {
+            BookCardV1(
+                bookInfo = bookInfo
+            )
+            HorizontalDivider(
+                color = Color.White,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+
+            )
+            PlanCardV1(
+                onStart = onButtonClick
             )
         }
     }
@@ -413,7 +573,7 @@ private fun PracticeItem(
         Text(
             text = stringResource(id = textId),
             fontSize = 14.sp,
-            color = colorResource(id = R.color.gray_dark)
+            color = Color.DarkGray
         )
     }
 }
@@ -498,8 +658,8 @@ fun LinearProgressBarTest() {
         gapSize = (-1).dp,
         drawStopIndicator = {},
         progress = { 0.48f },
-        color = colorResource(id = R.color.blue_progress),
-        trackColor = colorResource(id = R.color.common_gray),
+        color = Color.Blue,
+        trackColor = Color.Gray,
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 4.dp, bottom = 4.dp)

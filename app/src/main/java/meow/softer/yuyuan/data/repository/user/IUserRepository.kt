@@ -2,7 +2,8 @@ package meow.softer.yuyuan.data.repository.user
 
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.local.entiity.User
-import meow.softer.yuyuan.data.repository.setting.DefaultUserId
+import meow.softer.yuyuan.data.repository.dailyplan.DefaultUserId
+
 
 /**
  * Responsible for User data

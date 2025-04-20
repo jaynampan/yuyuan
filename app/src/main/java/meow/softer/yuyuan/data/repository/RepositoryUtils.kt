@@ -3,6 +3,7 @@ package meow.softer.yuyuan.data.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import meow.softer.yuyuan.data.Result
+import meow.softer.yuyuan.utils.debug
 
 /**
  * Specifically for repository's IO operations
@@ -13,6 +14,8 @@ suspend fun <T> runInBackground(block: suspend () -> T): Result<T> {
         val result = withContext(Dispatchers.IO) { block() }
         Result.Success(result)
     } catch (e: Exception) {
+        debug("Run in background error")
+        debug(e.stackTraceToString())
         Result.Error(e)
     }
 }

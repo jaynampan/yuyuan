@@ -1,6 +1,6 @@
 package meow.softer.yuyuan
 
-import meow.softer.yuyuan.common.utils.isToday
+import meow.softer.yuyuan.utils.isToday
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -39,5 +39,22 @@ class ExampleUnitTest {
         assertFalse(ZonedDateTime.parse("2024-12-12T21:59:59+06:00[Asia/Dhaka]").isToday())
 
         assertTrue(ZonedDateTime.parse("2024-12-12T19:00:00-05:00[America/New_York]").isToday())
+    }
+
+    @Test
+    fun zonedDateTime_nowTest(){
+        println(ZonedDateTime.now())
+    }
+
+    @Test
+    fun string_split(){
+        val pinyin = "liǎng zhǐ xiǎo māo zài wán shuǎ"
+        println(pinyin.split(" "))
+
+        val sentence = "我很高兴认识你"
+        val filteredList = sentence.filter { it in '\u4e00'..'\u9fff' }
+        val result = filteredList.toList()
+        println(result)
+
     }
 }

@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.androidx.room)
-    id("com.google.protobuf") version "0.9.4"
+    alias(libs.plugins.google.protobuf)
 }
 
 
@@ -16,14 +16,14 @@ plugins {
 android {
 
     namespace = "meow.softer.yuyuan"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "meow.softer.yuyuan"
-        minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 2
+        versionName = "0.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,25 +35,27 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isMinifyEnabled = false
+        }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
 
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
     }
 
     packaging {
@@ -64,13 +66,30 @@ android {
 
 }
 
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    //stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("stability_config.conf"))
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
 
-    implementation(platform(libs.compose.bom))
+    // compose bill of material
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
+    testImplementation(composeBom)
+    androidTestImplementation(composeBom)
+    debugImplementation(composeBom)
+
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
@@ -79,15 +98,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
+
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
     //lib
-    implementation(libs.material)
     implementation(libs.activity.ktx)
-    implementation(libs.circleimageview)
     implementation(libs.constraintlayout.compose)
     //Splash Screen
     implementation(libs.core.splashscreen)
@@ -104,12 +121,18 @@ dependencies {
     // DataStore
     implementation(libs.datastore)
     implementation(libs.protobuf.javalite)
+    // ExoPlayer
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.ui)
+    implementation(libs.media3.common)
+    // desugaring
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
 }
 // might have lint warns
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.21.9"
+        artifact = "com.google.protobuf:protoc:4.30.2"
     }
 
     generateProtoTasks {

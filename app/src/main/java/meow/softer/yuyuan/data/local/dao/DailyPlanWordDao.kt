@@ -11,8 +11,22 @@ interface DailyPlanWordDao {
     @Query("SELECT * FROM daily_plan_words")
     fun getAll(): List<DailyPlanWord>
 
+    @Query("SELECT * FROM daily_plan_words WHERE daily_plan_id = :dailyPlanId")
+    fun getAllByPlanId(dailyPlanId: Int): List<DailyPlanWord>
+
+    @Query("DELETE FROM daily_plan_words")
+    fun deleteAll()
+
+    @Query("DELETE FROM daily_plan_words WHERE daily_plan_id = :dailyPlanId")
+    fun deleteByPlanId(dailyPlanId: Int)
+
     @Insert
-    fun insertAll(vararg dailyPlanWords: DailyPlanWord)
+    fun insertAll(dailyPlanWords: List<DailyPlanWord>)
+
+    @Insert
+    fun insert(dailyPlanWord: DailyPlanWord)
+    @Query("INSERT INTO daily_plan_words VALUES(:planId, :wordId)")
+    fun insert(planId:Int, wordId:Int)
 
     @Delete
     fun delete(dailyPlanWord: DailyPlanWord)

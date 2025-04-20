@@ -9,8 +9,8 @@ import meow.softer.yuyuan.data.repository.setting.SettingRepository
 import meow.softer.yuyuan.data.repository.user.UserRepository
 import meow.softer.yuyuan.data.repository.word.WordRepository
 import meow.softer.yuyuan.data.successOr
-import meow.softer.yuyuan.ui.home.BookInfo
-import meow.softer.yuyuan.ui.home.PlanInfo
+import meow.softer.yuyuan.domain.BookInfo
+import meow.softer.yuyuan.domain.PlanInfo
 import javax.inject.Inject
 
 /**
@@ -32,7 +32,8 @@ class PlanRepository @Inject constructor(
         currentBook = getCurrentBookInfo() ?: BookInfo(
             bookName = "Error",
             learntWords = 0,
-            totalWords = 0
+            totalWords = 0,
+            bookId = 0
         )
         return withContext(Dispatchers.IO) {
             val plan = PlanInfo(
@@ -63,7 +64,7 @@ class PlanRepository @Inject constructor(
 
     private suspend fun getCurrentBookInfo(): BookInfo? {
         return withContext(Dispatchers.IO) {
-            val currentUserId = settings.getCurrentUserId()
+            val currentUserId = 1 //TODO:fix
             val currentBookId =
                 userRepository.getCurrentBookId(userId = currentUserId).successOr(-1)
             if (currentBookId == -1) return@withContext null
@@ -75,7 +76,8 @@ class PlanRepository @Inject constructor(
                 BookInfo(
                     bookName = currentBook.bookTitle,
                     learntWords = 0,
-                    totalWords = wordCount.toInt()
+                    totalWords = wordCount,
+                    bookId = 0
                 )
             } else {
                 null

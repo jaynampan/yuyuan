@@ -14,8 +14,24 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-renamesourcefileattribute SourceFile
+
+###=== DEBUG END ===
+
+-keep class com.google.protobuf.**
+# protobuf
+-keepclassmembers public class * extends com.google.protobuf.MessageLite {*;}
+
+# delete debugging info
+-assumenosideeffects class android.util.Log {
+    public static *** i(...);
+    public static *** d(...);
+    public static *** v(...);
+    public static *** w(...);
+    public static *** e(...);
+    public static *** wtf(...);
+}

@@ -1,29 +1,30 @@
 [versions]
-activityCompose = "1.9.3"
-circleimageview = "3.1.0"
-composeBom = "2024.11.00"
-constraintlayoutCompose = "1.1.0"
-coreKtx = "1.15.0"
-coreSplashscreen = "1.0.1"
-datastore = "1.1.1"
+activityCompose = "1.10.1"
+composeBom = "2025.04.00"
+constraintlayoutCompose = "1.1.1"
+coreKtx = "1.16.0"
+coreSplashscreen = "1.2.0-beta01"
+datastore = "1.1.4"
+desugar_jdk_libs = "2.1.5"
 espressoCore = "3.6.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 lifecycleRuntimeKtx = "2.8.7"
-material = "1.12.0"
-androidGradlePlugin = "8.7.3"
-kotlin = "2.0.21"
-navigationCompose = "2.8.4"
-hilt = "2.52"
-protobufJavalite = "4.29.1"
-room = "2.6.1"
+androidGradlePlugin = "8.9.1"
+kotlin = "2.1.20"
+media3Exoplayer = "1.6.1"
+exoPlayer = "1.6.1"
+media3Common = "1.6.1"
+navigationCompose = "2.8.9"
+hilt = "2.56.1"
+protobuf = "4.30.2"
+room = "2.7.0"
+googleProtoBufPlugin = "0.9.5"
 #noinspection GradleDependency
-ksp = "2.0.21-1.0.28"
+ksp = "2.1.20-2.0.0"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
-androidx-datastore-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
-circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityCompose" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
@@ -31,15 +32,18 @@ core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 junit = { module = "junit:junit", version.ref = "junit" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }
+media3-common = { module = "androidx.media3:media3-common", version.ref = "exoPlayer" }
+media3-ui = { module = "androidx.media3:media3-ui", version.ref = "exoPlayer" }
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "exoPlayer" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobufJavalite" }
+protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobuf" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -58,5 +62,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 # here didn't specify version to avoid errors
 kotlin-kapt = { id = "kotlin-kapt" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-androidx-room = {id = "androidx.room", version.ref ="room"}
+devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }#match major version with kotlin
+androidx-room = { id = "androidx.room", version.ref = "room" }
+google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlugin" }
+

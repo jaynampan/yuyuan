@@ -1,7 +1,7 @@
 package meow.softer.yuyuan.data.repository.plan
 
 import meow.softer.yuyuan.data.Result
-import meow.softer.yuyuan.ui.home.PlanInfo
+import meow.softer.yuyuan.domain.PlanInfo
 
 /**
  * Interface to the Plans in data layer.

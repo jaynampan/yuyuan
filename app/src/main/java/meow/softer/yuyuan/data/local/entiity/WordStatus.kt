@@ -10,8 +10,8 @@ import java.time.ZonedDateTime
 /**
  * CREATE TABLE [word_status](
  *   [id] INTEGER PRIMARY KEY AUTOINCREMENT,
- *   [word_id] INTEGER NOT NULL REFERENCES [words]([id]),
- *   [user_id] INTEGER NOT NULL REFERENCES [users]([id]),
+ *   [word_id] INTEGER NOT NULL REFERENCES [words][id],
+ *   [user_id] INTEGER NOT NULL REFERENCES [users][id],
  *   [is_learnt] BOOLEAN DEFAULT False,
  *   [isStarred] BOOLEAN DEFAULT False,
  *   [timeLearned] TIMESTAMP);

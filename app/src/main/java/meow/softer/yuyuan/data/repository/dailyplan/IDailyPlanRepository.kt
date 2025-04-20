@@ -2,8 +2,9 @@ package meow.softer.yuyuan.data.repository.dailyplan
 
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.local.entiity.DailyPlan
-import meow.softer.yuyuan.data.repository.setting.DefaultUserId
 import java.time.ZonedDateTime
+
+const val DefaultUserId = 1
 
 /**
  * Responsible for interacting with dailyPlan data

@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import meow.softer.yuyuan.data.Result
-import meow.softer.yuyuan.ui.home.BookInfo
-import meow.softer.yuyuan.ui.home.PlanInfo
+import meow.softer.yuyuan.domain.BookInfo
+import meow.softer.yuyuan.domain.PlanInfo
 import javax.inject.Inject
 
 /**
@@ -19,6 +19,7 @@ class MockPlanRepository @Inject constructor() : IPlanRepository {
             bookName = "HSK1",
             learntWords = 25,
             totalWords = 300,
+            bookId = 0,
         )
     )
     private val wordsPerDay = mutableIntStateOf(15)

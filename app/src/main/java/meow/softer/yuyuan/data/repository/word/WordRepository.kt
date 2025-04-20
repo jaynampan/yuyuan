@@ -1,5 +1,6 @@
 package meow.softer.yuyuan.data.repository.word
 
+import androidx.compose.ui.res.booleanResource
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.local.dao.WordDao
 import meow.softer.yuyuan.data.local.entiity.Word
@@ -28,4 +29,19 @@ class WordRepository @Inject constructor(
     override suspend fun getWordCountByBookId(bookId: Int): Result<Int> {
         return runInBackground { wordDao.countByBookId(bookId) }
     }
+
+    suspend fun getWordLearntCountByBook(bookId: Int): Result<Int> {
+        return runInBackground { wordDao.countWordLearntByBook(bookId) }
+    }
+
+    /**
+     * Get the words whose id is larger than [startId]
+     * @param startId will query id > [startId], it's not included
+     */
+    suspend fun getByBookWithLimit(startId: Int, bookId: Int, limit: Int): Result<List<Word>> {
+        return runInBackground {
+            wordDao.getByBookWithLimit(startId, bookId, limit)
+        }
+    }
+
 }

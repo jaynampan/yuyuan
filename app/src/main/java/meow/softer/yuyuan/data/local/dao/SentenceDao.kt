@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import meow.softer.yuyuan.data.local.entiity.Sentence
+import meow.softer.yuyuan.data.local.entiity.Word
 
 @Dao
 interface SentenceDao {
@@ -32,4 +33,6 @@ interface SentenceDao {
 
     @Delete
     fun delete(sentence: Sentence)
+
+
 }

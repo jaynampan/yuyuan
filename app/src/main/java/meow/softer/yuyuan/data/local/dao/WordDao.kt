@@ -26,10 +26,21 @@ interface WordDao {
     @Query("SELECT * FROM words WHERE id IN (:ids)")
     fun getByIds(ids: List<Int>): List<Word>
 
-    @Query("SELECT COUNT(character) FROM words where book_id = :bookId")
+    @Query("SELECT COUNT(character) FROM words WHERE book_id = :bookId")
     fun countByBookId(bookId: Int): Int
 
     @Query("SELECT COUNT(character) FROM words")
     fun countWords(): Int
+
+    @Query(
+        "SELECT COUNT(w.id) FROM words AS w " +
+                "JOIN word_status AS s " +
+                "ON w.id = s.word_id " +
+                "WHERE w.book_id = :bookId AND s.is_learnt = 1"
+    )
+    fun countWordLearntByBook(bookId: Int): Int
+
+    @Query("select * from words where id > :startId and book_id = :bookId limit :limit")
+    fun getByBookWithLimit(startId:Int,bookId: Int, limit: Int): List<Word>
 
 }

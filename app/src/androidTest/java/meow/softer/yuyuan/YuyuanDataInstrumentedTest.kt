@@ -226,10 +226,10 @@ class YuyuanDataInstrumentedTest {
                 assertNotNull(data)
                 assertEquals(129, data.id)
                 assertEquals(129, data.wordId)
-                assertEquals("这是新的一年。", data.sentence)
+                assertEquals("这是新的一年。", data.content)
                 assertEquals("This is a new year.", data.translation)
-                assertEquals("zhè shì xīn de yī nián", data.sentencePinyin)
-                assertEquals("年_s.mp3", data.sentenceAudioFile)
+                assertEquals("zhè shì xīn de yī nián", data.pinyin)
+                assertEquals("年_s.mp3", data.audioFile)
 
                 println(data.createdAt)
                 assertTrue("2024-12-11" in data.createdAt.toString())
@@ -243,7 +243,7 @@ class YuyuanDataInstrumentedTest {
                 assertNotNull(data)
                 assertEquals(518, data.id)
                 assertEquals(518, data.wordId)
-                assertEquals("请给我一张纸。", data.sentence)
+                assertEquals("请给我一张纸。", data.content)
             }
         )
         testYuResult(
@@ -252,7 +252,7 @@ class YuyuanDataInstrumentedTest {
                 assertNotNull(data)
                 assertEquals(850, data.id)
                 assertEquals(850, data.wordId)
-                assertEquals("他穿着一条牛仔裤。", data.sentence)
+                assertEquals("他穿着一条牛仔裤。", data.content)
             }
         )
         val words = testDatabase.wordDao().getByBookId(1)
@@ -261,19 +261,24 @@ class YuyuanDataInstrumentedTest {
             onSuccess = { data ->
                 assertNotNull(data)
                 assertEquals(520, data.size)
-                assertNotNull(data[120].sentence)
-                assertNotNull(data[120].sentenceAudioFile)
+                assertNotNull(data[120].content)
+                assertNotNull(data[120].audioFile)
                 assertEquals(data[120].id, data[120].wordId)
             }
         )
-        val ids = listOf<Int>(1, 15, 79)
+        val ids = listOf(1, 15, 79)
         testYuResult(
             arg = sentenceRepository.getSentencesByIds(ids),
             onSuccess = { data ->
                 assertNotNull(data)
                 assertEquals(ids, data.map { it.id })
-                assertNotNull(data[0].sentence)
+                assertNotNull(data[0].content)
             }
         )
+    }
+
+    @Test
+    fun dailyPlanWordDao_test() = runTest {
+
     }
 }

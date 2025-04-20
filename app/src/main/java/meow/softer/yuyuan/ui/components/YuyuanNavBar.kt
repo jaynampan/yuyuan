@@ -6,7 +6,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import meow.softer.yuyuan.navigation.HomeDestination
+import meow.softer.yuyuan.ui.navigation.HomeDestination
 
 /**
  * Yuyuan's bottom navigation tab row

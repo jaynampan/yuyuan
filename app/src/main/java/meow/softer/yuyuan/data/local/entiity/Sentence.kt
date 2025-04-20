@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 /**
  * CREATE TABLE [sentences](
  *   [id] INTEGER PRIMARY KEY AUTOINCREMENT,
- *   [word_id] INTEGER NOT NULL REFERENCES [words]([id]),
+ *   [word_id] INTEGER NOT NULL REFERENCES [words][id],
  *   [sentence] TEXT NOT NULL,
  *   [translation] TEXT NOT NULL,
  *   [sentence_pinyin] TEXT NOT NULL,
@@ -33,9 +33,9 @@ import java.time.ZonedDateTime
 data class Sentence(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "word_id") val wordId: Int,
-    val sentence: String,
+    @ColumnInfo(name = "sentence")val content: String,
     val translation: String,
-    @ColumnInfo(name = "sentence_pinyin") val sentencePinyin: String,
-    @ColumnInfo(name = "sentence_audio_file") val sentenceAudioFile: String,
+    @ColumnInfo(name = "sentence_pinyin") val pinyin: String,
+    @ColumnInfo(name = "sentence_audio_file") val audioFile: String,
     @ColumnInfo(name = "created_at") val createdAt: ZonedDateTime
 )
