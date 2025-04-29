@@ -14,13 +14,16 @@ class GetHanziInfoUseCase @Inject constructor(
     private val wordRepository: WordRepository,
     private val sentenceRepository: SentenceRepository
 ) {
-    suspend operator fun invoke(limit: Int): List<HanziInfo> {
+    suspend operator fun invoke(limit: Int, startIdx:Int = -1): List<HanziInfo> {
         val bookId = settingRepository.getSettings().currentBookId
-        val newestId = wordStatusRepository.getNewestLearntWordIdByBook(bookId).successOr(-1)
+        var newestId = wordStatusRepository.getNewestLearntWordIdByBook(bookId).successOr(-1)
         // 0 for brand new book
         if (newestId < 0) {
             debug("get cache: newestId < 0")
             return emptyList()
+        }
+        if(startIdx > newestId){
+            newestId = startIdx
         }
         val words = wordRepository.getByBookWithLimit(newestId, bookId, limit).successOr(null)
         val ids = words?.map { it.id }

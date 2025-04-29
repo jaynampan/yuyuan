@@ -96,7 +96,9 @@ class PlaygroundViewModel @Inject constructor(
     private var hanziPool = mutableListOf<HanziInfo>()
     private val cacheMax = 12
     private val cacheMin = 4
+    private var latestCachedId = -1
     private var isAtEnd = false
+
 
     /**
      * There are two cases to navigate back: user clicks the back arrow or the words are all learnt.
@@ -187,7 +189,8 @@ class PlaygroundViewModel @Inject constructor(
         debug("refilling cache...")
         if (isAtEnd) return
         if (hanziPool.size <= cacheMin) {
-            val newCache = getHanziInfoUseCase(cacheMax - hanziPool.size)
+            val newCache = getHanziInfoUseCase(cacheMax - hanziPool.size, latestCachedId)
+            latestCachedId = newCache.maxOfOrNull { it.word.id } ?: -1
             if (newCache.isEmpty()) {
                 isAtEnd = true
             } else {
