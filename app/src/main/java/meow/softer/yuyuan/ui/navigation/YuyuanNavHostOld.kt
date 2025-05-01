@@ -20,6 +20,7 @@ import meow.softer.yuyuan.ui.home.HomeScreen
 import meow.softer.yuyuan.ui.home.MainViewModel
 import meow.softer.yuyuan.ui.playground.PlaygroundScreen
 import meow.softer.yuyuan.ui.playground.PlaygroundViewModel
+import meow.softer.yuyuan.ui.playground.WriteScreen
 import meow.softer.yuyuan.ui.setting.SettingScreen
 
 @Composable
@@ -99,7 +100,8 @@ fun YuyuanNavHost(
                 onBack = {
                     navController.navigateSingleTop(Home.route)
                     playgroundViewModel.stopAudio()
-                }
+                },
+                navigateTo = { navController.navigate(it) }
             )
         }
 
@@ -109,6 +111,12 @@ fun YuyuanNavHost(
                     navController.navigateSingleTop(Home.route)
                 },
                 mainViewModel = mainViewModel
+            )
+        }
+        composable(route = Write.route) {
+            WriteScreen(
+                viewModel = playgroundViewModel,
+                onBack = {navController.popBackStack() }
             )
         }
 

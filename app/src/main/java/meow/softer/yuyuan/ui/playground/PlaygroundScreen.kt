@@ -14,13 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dagger.hilt.android.EntryPointAccessors
+import meow.softer.yuyuan.ui.navigation.Write
 import meow.softer.yuyuan.utils.debug
 
 /**
@@ -65,7 +63,8 @@ fun PlaygroundScreenOld(
 @Composable
 fun PlaygroundScreen(
     viewModel: PlaygroundViewModel,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    navigateTo:(String)-> Unit
 ) {
     // Collect the navigateBack state
     val navigateBack by viewModel.navigateBack.collectAsState()
@@ -112,6 +111,7 @@ fun PlaygroundScreen(
                 playWordSound = { viewModel.playWordSound() },
                 playSentenceSound = { viewModel.playSentenceSound() },
                 onNext = { viewModel.onNextClick() },
+                onWrite = { navigateTo(Write.route)}
             )
         }
     } else {
@@ -143,14 +143,3 @@ fun PlaygroundContent(content: @Composable () -> Unit) {
 }
 
 
-@Preview
-@Composable
-fun PlaygroundPreview() {
-    val playgroundViewModelOld: PlaygroundViewModelOld = EntryPointAccessors.fromApplication(
-        LocalContext.current, PlaygroundViewModelOld::class.java
-    )
-    PlaygroundScreenOld(
-        viewModel = playgroundViewModelOld,
-        onBack = {}
-    )
-}

@@ -85,6 +85,10 @@ object Inbox : YuyuanDestination {
 object Search : YuyuanDestination {
     override val route: String = "Search"
 }
+object Write: YuyuanDestination {
+    override val route: String = "Write"
+}
+
 
 // Screens to be displayed in the top YuyuanTabRow
 val yuyuanTabRowScreens = listOf(Home, Lesson, Me)

@@ -1,6 +1,7 @@
 package meow.softer.yuyuan.ui.playground
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import meow.softer.yuyuan.data.local.entiity.Sentence
 import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.domain.HanziInfo
 import meow.softer.yuyuan.ui.components.PinyinText
+import meow.softer.yuyuan.utils.debug
 import java.time.ZonedDateTime
 
 @Composable
@@ -113,7 +115,8 @@ fun WordMemoryScreen(
     onBack: () -> Unit,
     playWordSound: () -> Unit,
     playSentenceSound: () -> Unit,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    onWrite: () -> Unit
 ) {
     Column {
         HeadBarV1(
@@ -125,7 +128,8 @@ fun WordMemoryScreen(
             currentHanzi = currentHanzi,
             playWordSound = { playWordSound() },
             playSentenceSound = { playSentenceSound() },
-            onNext = { onNext() }
+            onNext = { onNext() },
+            onWrite = { onWrite() }
         )
     }
 }
@@ -165,7 +169,7 @@ private fun HeadBar(
 }
 
 @Composable
-private fun HeadBarV1(
+internal fun HeadBarV1(
     onBack: () -> Unit
 ) {
     Row(
@@ -215,13 +219,15 @@ private fun BodyV1(
     currentHanzi: HanziInfo,
     playWordSound: () -> Unit,
     playSentenceSound: () -> Unit,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    onWrite: () -> Unit
 ) {
     MainCardV1(
         currentHanzi = currentHanzi,
         playWordSound = playWordSound,
         playSentenceSound = playSentenceSound,
         onNext = { onNext() },
+        onWrite = { onWrite() }
     )
 
 }
@@ -250,20 +256,22 @@ private fun MainCardV1(
     currentHanzi: HanziInfo,
     playWordSound: () -> Unit,
     playSentenceSound: () -> Unit,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    onWrite: () -> Unit
 ) {
     Column {
         WordAreaV1(
             hanziInfo = currentHanzi,
             playWordSound = playWordSound,
             playSentenceSound = playSentenceSound,
+            onWrite = { onWrite() }
         )
         ButtonArea(onNextClick = { onNext() })
     }
 }
 
 @Composable
-private fun ButtonArea(
+internal fun ButtonArea(
     onNextClick: () -> Unit
 ) {
     Box(
@@ -359,7 +367,8 @@ private fun WordArea(
 private fun WordAreaV1(
     hanziInfo: HanziInfo,
     playWordSound: () -> Unit,
-    playSentenceSound: () -> Unit
+    playSentenceSound: () -> Unit,
+    onWrite: () -> Unit
 ) {
     LaunchedEffect(hanziInfo) {
         delay(100)
@@ -427,6 +436,14 @@ private fun WordAreaV1(
                 text = hanziInfo.sentence.translation,
                 fontSize = 18.sp
             )
+        }
+
+        // writing display
+        WebPage(
+            hanziInfo.word.character
+        ) {
+            debug("OnWriteClicked")
+            onWrite()
         }
     }
 }

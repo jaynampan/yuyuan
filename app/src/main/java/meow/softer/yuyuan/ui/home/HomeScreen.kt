@@ -60,6 +60,7 @@ import meow.softer.yuyuan.ui.navigation.Inbox
 import meow.softer.yuyuan.ui.navigation.Playground
 import meow.softer.yuyuan.ui.navigation.Search
 import meow.softer.yuyuan.ui.navigation.Setting
+import meow.softer.yuyuan.ui.navigation.Write
 
 /**
  * the first screen when app is launched
