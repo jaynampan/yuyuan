@@ -1,6 +1,5 @@
 package meow.softer.yuyuan.data.repository.word
 
-import androidx.compose.ui.res.booleanResource
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.local.dao.WordDao
 import meow.softer.yuyuan.data.local.entiity.Word

@@ -13,15 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import meow.softer.yuyuan.R
 
-/**
- * Lesson Screen where the user can take lessons
- */
-@Composable
-fun LessonScreen(){
-    LearnFragmentLayout()
-}
-
-
 
 @Composable
 fun LearnFragmentLayout() {

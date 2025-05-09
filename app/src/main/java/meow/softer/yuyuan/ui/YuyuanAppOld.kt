@@ -7,19 +7,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import meow.softer.yuyuan.ui.components.YuyuanNavBar
+import meow.softer.yuyuan.ui.home.MainViewModel
 import meow.softer.yuyuan.ui.navigation.Home
 import meow.softer.yuyuan.ui.navigation.HomeDestination
-import meow.softer.yuyuan.ui.navigation.YuyuanNavHostOld
+import meow.softer.yuyuan.ui.navigation.YuyuanNavHost
 import meow.softer.yuyuan.ui.navigation.navigateSingleTop
 import meow.softer.yuyuan.ui.navigation.yuyuanTabRowScreens
-import meow.softer.yuyuan.ui.components.YuyuanNavBar
-import meow.softer.yuyuan.ui.home.HomeViewModelOld
-import meow.softer.yuyuan.ui.playground.PlaygroundViewModelOld
+import meow.softer.yuyuan.ui.playground.PlaygroundViewModel
 
 @Composable
 fun YuyuanApp(
-    homeViewModelOld: HomeViewModelOld,
-    playgroundViewModelOld: PlaygroundViewModelOld
+    mainViewModel: MainViewModel,
+    playgroundViewModel: PlaygroundViewModel
 ) {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
@@ -40,11 +40,12 @@ fun YuyuanApp(
 
         }
     ) { innerPaddings ->
-        YuyuanNavHostOld(
+        val navController = rememberNavController()
+        YuyuanNavHost(
             navController = navController,
             modifier = Modifier.padding(innerPaddings),
-            homeViewModelOld = homeViewModelOld,
-            playgroundViewModelOld = playgroundViewModelOld
+            mainViewModel = mainViewModel,
+            playgroundViewModel = playgroundViewModel
         )
     }
 }

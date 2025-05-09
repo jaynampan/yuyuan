@@ -4,7 +4,6 @@ package meow.softer.yuyuan.domain.session
 import android.content.res.AssetManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import meow.softer.yuyuan.utils.debug
 import meow.softer.yuyuan.data.local.entiity.Sentence
 import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.data.repository.media.SoundRepositoryOld
@@ -12,11 +11,10 @@ import meow.softer.yuyuan.data.repository.sentence.SentenceRepository
 import meow.softer.yuyuan.data.repository.setting.SettingRepository
 import meow.softer.yuyuan.data.repository.word.WordRepository
 import meow.softer.yuyuan.data.successOr
+import meow.softer.yuyuan.utils.debug
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
-
-private val MyTag = SessionUseCase::class.simpleName
 
 
 /**
@@ -108,7 +106,7 @@ class SessionUseCase @Inject constructor(
         soundRepositoryOld.playOnce(assetManager.openFd(source))
     }
 
-    suspend fun getLearntWordId(book: Int): Int {
+    fun getLearntWordId(book: Int): Int {
         return 1
         //TODO: fix
     }

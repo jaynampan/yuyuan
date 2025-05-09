@@ -10,8 +10,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import meow.softer.yuyuan.utils.ErrorMessage
-import meow.softer.yuyuan.utils.debug
 import meow.softer.yuyuan.data.local.entiity.Sentence
 import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.data.repository.media.toSentenceAudioPath
@@ -19,9 +17,8 @@ import meow.softer.yuyuan.data.repository.media.toWordAudioPath
 import meow.softer.yuyuan.domain.session.ActionType
 import meow.softer.yuyuan.domain.session.SessionUseCaseOld
 import meow.softer.yuyuan.domain.statistic.StatisticUseCase
+import meow.softer.yuyuan.utils.ErrorMessage
 import javax.inject.Inject
-
-private val MyTag = PlaygroundViewModelOld::class.simpleName
 
 /**
  * UI state for the Playground.
@@ -107,7 +104,7 @@ class PlaygroundViewModelOld @Inject constructor(
     }
 
     fun refreshData() {
-        debug("prepared: ${sessionUseCaseOld.isPlanPrepared.value}", MyTag)
+//        debug("prepared: ${sessionUseCaseOld.isPlanPrepared.value}", MyTag)
         if(!sessionUseCaseOld.isPlanPrepared.value){
             return
         }

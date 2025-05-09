@@ -43,30 +43,6 @@ object Me : HomeDestination {
     override val route = "Me"
 }
 
-/**
- * Playground destinations
- */
-
-object WordMemory : PlaygroundDestination {
-    override val route: String = "WordMemory"
-}
-
-object WordDetail : PlaygroundDestination {
-    override val route: String = "WordDetail"
-}
-
-object WordWriting : PlaygroundDestination {
-    override val route: String = "WordWriting"
-}
-
-/**
- * Yuyuan app other navigation destinations
- */
-
-object Profile : YuyuanDestination {
-    override val route: String = "Profile"
-}
-
 object Setting : YuyuanDestination {
     override val route: String = "Setting"
 }

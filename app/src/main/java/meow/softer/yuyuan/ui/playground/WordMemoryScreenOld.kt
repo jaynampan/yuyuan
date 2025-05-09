@@ -1,7 +1,6 @@
 package meow.softer.yuyuan.ui.playground
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,73 +40,6 @@ import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.domain.HanziInfo
 import meow.softer.yuyuan.ui.components.PinyinText
 import meow.softer.yuyuan.utils.debug
-import java.time.ZonedDateTime
-
-@Composable
-fun WordMemoryScreenOld(
-    uiState: PlaygroundUiStateOld,
-    onBack: () -> Unit,
-    toggleStarred: () -> Unit,
-    playWordSound: () -> Unit,
-    playSentenceSound: () -> Unit,
-    onSearch: () -> Unit,
-    onMoreClick: () -> Unit,
-    goNext: () -> Unit
-) {
-    val statisticTexts = when (uiState) {
-        is PlaygroundUiStateOld.NoData -> listOf("", "", "")
-        is PlaygroundUiStateOld.NewWordScreen -> uiState.statisticTexts
-    }
-
-    val word = when (uiState) {
-        is PlaygroundUiStateOld.NoData -> Word(
-            character = "None",
-            pinyin = "None",
-            audioFile = "None",
-            charJsonFile = "None",
-            meaning = "None",
-            bookId = -1
-        )
-
-        is PlaygroundUiStateOld.NewWordScreen -> uiState.currentWord
-    }
-    val sentence = when (uiState) {
-        is PlaygroundUiStateOld.NoData -> Sentence(
-            wordId = -1,
-            content = "",
-            translation = "",
-            pinyin = "",
-            audioFile = "",
-            createdAt = ZonedDateTime.now()
-        )
-
-        is PlaygroundUiStateOld.NewWordScreen -> uiState.currentSentence
-    }
-    Column {
-        HeadBar(
-            onBack = {
-                onBack()
-            },
-            onSearch = {
-                onSearch()
-            },
-            onStar = {
-                toggleStarred()
-            },
-            onDotsClick = {
-                onMoreClick()
-            }
-        )
-        Body(
-            statisticTexts = statisticTexts,
-            word = word,
-            sentence = sentence,
-            playWordSound = { playWordSound() },
-            playSentenceSound = { playSentenceSound() },
-            goNext = { goNext() }
-        )
-    }
-}
 
 @Composable
 fun WordMemoryScreen(

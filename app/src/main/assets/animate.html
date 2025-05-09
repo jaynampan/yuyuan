@@ -1,29 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="file:///android_asset/hanzi-writer.min.js"></script>
-    <script src="file:///android_asset/jquery.min.js"></script>
-
     <title>Animate</title>
     <style>
-        .body{
-             background-color: rgba(255, 255, 255, 0); /* Fully transparent background */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
-        }
         #grid-div{
-            background-color: rgba(255, 255, 255, 0);
             display: flex;
             justify-content: center;
-
         }
-
     </style>
 </head>
-
 <body>
 <div id="grid-div">
     <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" id="grid-target">
@@ -35,10 +23,8 @@
         <line x1="0" y1="250" x2="250" y2="250" stroke="#DDD"/>
         <line x1="0" y1="0" x2="0" y2="250" stroke="#DDD"/>
         <line x1="250" y1="0" x2="250" y2="250" stroke="#DDD"/>
-
     </svg>
 </div>
-
 <script>
     "use strict";  // Enabling strict mode
     var writer = null
@@ -49,7 +35,7 @@
             writer.hideOutline()
             writer.setCharacter(character)
         }
-         writer = HanziWriter.create('grid-target', character, {
+        writer = HanziWriter.create('grid-target', character, {
             charDataLoader: function (char, onComplete) {
                 onComplete(json);
             },
@@ -60,24 +46,18 @@
             strokeAnimationSpeed: 1,
             delayBetweenStrokes: 200,
             delayBetweenLoops: 300
-
         });
         if(isShow){
             writer.loopCharacterAnimation()
         }else{
             writer.quiz({
-
                 onComplete:function(data){
-                //AndroidInterface.goContinue()
             },
             showHintAfterMisses:2
             })
         }
 
     }
-
-
 </script>
 </body>
-
 </html>

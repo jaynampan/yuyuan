@@ -1,31 +1,25 @@
 package meow.softer.yuyuan.ui.home
 
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import meow.softer.yuyuan.R
 import meow.softer.yuyuan.data.local.entiity.Book
-import meow.softer.yuyuan.utils.ErrorMessage
-import meow.softer.yuyuan.utils.debug
 import meow.softer.yuyuan.domain.BookInfo
 import meow.softer.yuyuan.domain.GetBookUseCase
 import meow.softer.yuyuan.domain.GetSettingsUseCase
 import meow.softer.yuyuan.domain.UpdateSettingsUseCase
 import meow.softer.yuyuan.domain.UpdateSettingsUseCase.ConfigType
-import meow.softer.yuyuan.domain.session.SessionUseCase
+import meow.softer.yuyuan.utils.ErrorMessage
+import meow.softer.yuyuan.utils.debug
 import java.util.UUID
 import javax.inject.Inject
 

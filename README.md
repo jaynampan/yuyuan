@@ -16,5 +16,7 @@ This app can run on API 24 or higher without network, all data is bundled in the
 - 2025-04-21: Implemented basic function(play word & sentence sound, choose speed, choose book)
 - 2024-12-13: Updated the structure to a modern way, with data and ui layers 
 
+![demo](./demo/demo.jpg)
+
 
 

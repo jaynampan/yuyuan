@@ -14,7 +14,6 @@ import meow.softer.yuyuan.data.repository.dailyplan.DailyPlanRepository
 import meow.softer.yuyuan.data.repository.dailyplanword.DailyPlanWordRepository
 import meow.softer.yuyuan.data.repository.runInBackground
 import meow.softer.yuyuan.data.repository.sentence.SentenceRepository
-import meow.softer.yuyuan.data.repository.setting.SettingRepository
 import meow.softer.yuyuan.data.repository.media.SoundRepositoryOld
 import meow.softer.yuyuan.data.repository.user.UserRepository
 import meow.softer.yuyuan.data.repository.word.WordRepository
@@ -41,7 +40,6 @@ enum class ActionType {
 @Singleton
 class SessionUseCaseOld @Inject constructor(
     private val assetManager: AssetManager,
-    private val settingRepository: SettingRepository,
     private val userRepository: UserRepository,
     private val wordRepository: WordRepository,
     private val sentenceRepository: SentenceRepository,

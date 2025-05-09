@@ -25,46 +25,10 @@ import meow.softer.yuyuan.utils.debug
  * The main UI of a learning session
  */
 @Composable
-fun PlaygroundScreenOld(
-    viewModel: PlaygroundViewModelOld,
-    onBack: () -> Unit
-) {
-    LaunchedEffect(Unit) {
-        viewModel.refreshData()
-    }
-
-
-    // Collect the navigateBack state
-    val navigateBack by viewModel.navigateBack.collectAsState()
-
-    // When the navigateBack state changes to true, trigger navigation
-    LaunchedEffect(navigateBack) {
-        if (navigateBack) {
-            onBack() // Navigate back
-        }
-    }
-
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-
-    PlaygroundContent {
-        WordMemoryScreenOld(
-            uiState.value,
-            onBack = onBack,
-            toggleStarred = { viewModel.toggleStarred() },
-            playWordSound = { viewModel.playWordSound() },
-            playSentenceSound = { viewModel.playSentenceSound() },
-            onSearch = { viewModel.searchWord() },
-            onMoreClick = { viewModel.showMoreMenu() },
-            goNext = { viewModel.goNext() },
-        )
-    }
-}
-
-@Composable
 fun PlaygroundScreen(
     viewModel: PlaygroundViewModel,
     onBack: () -> Unit,
-    navigateTo:(String)-> Unit
+    navigateTo: (String) -> Unit
 ) {
     // Collect the navigateBack state
     val navigateBack by viewModel.navigateBack.collectAsState()
@@ -82,6 +46,7 @@ fun PlaygroundScreen(
                 debug("ON_STOP")
                 viewModel.stopAudio()
             }
+
             else -> Unit
         }
     }
@@ -111,7 +76,7 @@ fun PlaygroundScreen(
                 playWordSound = { viewModel.playWordSound() },
                 playSentenceSound = { viewModel.playSentenceSound() },
                 onNext = { viewModel.onNextClick() },
-                onWrite = { navigateTo(Write.route)}
+                onWrite = { navigateTo(Write.route) }
             )
         }
     } else {

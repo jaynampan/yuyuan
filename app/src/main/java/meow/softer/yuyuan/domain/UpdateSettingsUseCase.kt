@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * Initialize or update settings
  *
- * Use operator [invoke] with [ConfigType.SET_UP] to initialize settings
+ *
  * ```
  *  updateSettingsUseCase(ConfigType.SET_UP)
  * ```
@@ -43,7 +43,7 @@ class UpdateSettingsUseCase @Inject constructor(
         when (type) {
             ConfigType.CURRENT_SPEED -> {
                 settingRepository.setCurrentAudioSpeed(value as Float)
-                debug("Updatesetting: speed= $value")
+                debug("Update setting: speed= $value")
                 soundRepositoryOld.setSpeed(value)
             }
 

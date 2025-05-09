@@ -29,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -60,22 +59,6 @@ import meow.softer.yuyuan.ui.navigation.Inbox
 import meow.softer.yuyuan.ui.navigation.Playground
 import meow.softer.yuyuan.ui.navigation.Search
 import meow.softer.yuyuan.ui.navigation.Setting
-import meow.softer.yuyuan.ui.navigation.Write
-
-/**
- * the first screen when app is launched
- */
-@Composable
-fun HomeScreenOld(
-    homeViewModelOld: HomeViewModelOld,
-    onRouteClick: (String) -> Unit
-) {
-    val uiState = homeViewModelOld.uiState.collectAsStateWithLifecycle()
-    HomeScreenContentOld(
-        uiState = uiState.value,
-        onRouteClick = onRouteClick
-    )
-}
 
 @Composable
 fun HomeScreen(

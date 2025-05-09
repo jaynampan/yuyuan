@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SoundRepository @Inject constructor(
-    private val context: Context
+    context: Context
 ) {
     private var player: ExoPlayer = ExoPlayer.Builder(context).build()
     private var speed: Float = 1f

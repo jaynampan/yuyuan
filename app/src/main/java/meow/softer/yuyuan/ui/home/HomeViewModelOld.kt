@@ -135,11 +135,4 @@ class HomeViewModelOld @Inject constructor(
         }
     }
 
-    fun onSpeedChosen() {
-        TODO("Not yet implemented")
-    }
-
-    fun onBookChosen() {
-        TODO("Not yet implemented")
-    }
 }

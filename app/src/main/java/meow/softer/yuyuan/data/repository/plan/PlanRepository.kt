@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.repository.book.BookRepository
-import meow.softer.yuyuan.data.repository.setting.SettingRepository
 import meow.softer.yuyuan.data.repository.user.UserRepository
 import meow.softer.yuyuan.data.repository.word.WordRepository
 import meow.softer.yuyuan.data.successOr
@@ -18,7 +17,6 @@ import javax.inject.Inject
  * should use repositories to access data
  */
 class PlanRepository @Inject constructor(
-    private val settings: SettingRepository,
     private val userRepository: UserRepository,
     private val bookRepository: BookRepository,
     private val wordRepository: WordRepository
