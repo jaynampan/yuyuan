@@ -369,13 +369,14 @@ private fun WordAreaV1(
                 fontSize = 18.sp
             )
         }
-
-        // writing display
-        WebPage(
-            hanziInfo.word.character
-        ) {
-            debug("OnWriteClicked")
-            onWrite()
+        if(hanziInfo.word.charJsonFile != null){
+            // writing display
+            WebPage(
+                hanziInfo.word.character
+            ) {
+                debug("OnWriteClicked")
+                onWrite()
+            }
         }
     }
 }

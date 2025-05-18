@@ -21,6 +21,8 @@ class SettingRepository @Inject constructor(
      * Get user's settings
      *
      * Note the speed is in raw int32 format
+     *
+     * Main-Safe
      */
     override suspend fun getSettings(): YuyuanSetting {
         return withContext(ioDispatcher) {

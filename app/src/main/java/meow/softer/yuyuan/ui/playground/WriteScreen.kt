@@ -54,6 +54,7 @@ fun WriteScreen(
                 modifier =
                     Modifier.height(50.dp)
             )
+
             WebPage(
                 hanziInfo.word.character,
                 onTap = {

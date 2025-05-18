@@ -59,6 +59,7 @@ import meow.softer.yuyuan.ui.navigation.Inbox
 import meow.softer.yuyuan.ui.navigation.Playground
 import meow.softer.yuyuan.ui.navigation.Search
 import meow.softer.yuyuan.ui.navigation.Setting
+import meow.softer.yuyuan.ui.theme.primaryLight
 
 @Composable
 fun HomeScreen(
@@ -324,12 +325,11 @@ private fun BookCardV1(
                         start.linkTo(parent.start)
                     }
             )
-
             LinearProgressIndicator(
                 gapSize = (-1).dp,
                 drawStopIndicator = {},
-                progress = { (bookInfo.learntWords / bookInfo.totalWords).toFloat() },
-                color = Color.Blue,
+                progress = { bookInfo.learntWords.toFloat() / bookInfo.totalWords },
+                color = primaryLight,
                 trackColor = Color.Gray,
                 modifier = Modifier
                     .fillMaxWidth()

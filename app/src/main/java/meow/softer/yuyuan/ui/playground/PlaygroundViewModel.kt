@@ -17,8 +17,8 @@ import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.domain.GetHanziInfoUseCase
 import meow.softer.yuyuan.domain.HanziInfo
 import meow.softer.yuyuan.domain.PlayHanziAudioUseCase
-import meow.softer.yuyuan.domain.StopAudioUseCase
 import meow.softer.yuyuan.domain.SaveProgressUseCase
+import meow.softer.yuyuan.domain.StopAudioUseCase
 import meow.softer.yuyuan.ui.home.SharedViewModel
 import meow.softer.yuyuan.utils.ErrorMessage
 import meow.softer.yuyuan.utils.debug
@@ -86,8 +86,9 @@ class PlaygroundViewModel @Inject constructor(
     private val saveProgressUseCase: SaveProgressUseCase,
     private val getHanziInfoUseCase: GetHanziInfoUseCase,
     private val playHanziAudioUseCase: PlayHanziAudioUseCase,
-    private val stopAudioUseCase: StopAudioUseCase
-) : ViewModel() {
+    private val stopAudioUseCase: StopAudioUseCase,
+
+    ) : ViewModel() {
     private val viewModelState = MutableStateFlow(
         PlaygroundViewModelState(isLoading = true)
     )
@@ -192,6 +193,9 @@ class PlaygroundViewModel @Inject constructor(
             val newCache = getHanziInfoUseCase(cacheMax - hanziPool.size, latestCachedId)
             latestCachedId = newCache.maxOfOrNull { it.word.id } ?: -1
             if (newCache.isEmpty()) {
+                // issue: fast switching book would cause delay, resulting in empty cache when not at end
+                // todo: fix it in a more elegant way
+
                 isAtEnd = true
             } else {
                 hanziPool = hanziPool.plus(newCache) as MutableList<HanziInfo>
@@ -207,6 +211,7 @@ class PlaygroundViewModel @Inject constructor(
             refillCache()
             if (isAtEnd) {
                 // reached end of book
+                debug("playVM is at end now")
                 _navigateBack.value = true //todo : reset?
                 stopAudio()
                 return@launch

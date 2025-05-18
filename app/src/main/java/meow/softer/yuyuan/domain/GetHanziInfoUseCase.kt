@@ -19,6 +19,7 @@ class GetHanziInfoUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend operator fun invoke(limit: Int, startIdx: Int = -1): List<HanziInfo> {
+        //todo: might cause wrong data due to delay of book switching
         return withContext(ioDispatcher) {
             val bookId = settingRepository.getSettings().currentBookId
             var newestId = wordStatusRepository.getNewestLearntWordIdByBook(bookId).successOr(-1)
@@ -33,7 +34,8 @@ class GetHanziInfoUseCase @Inject constructor(
             val words = wordRepository.getByBookWithLimit(newestId, bookId, limit).successOr(null)
             val ids = words?.map { it.id }
             if (ids.isNullOrEmpty()) {
-                debug("get cache: ids are null or empty")
+                debug("get cache: ids are null or empty: newestId = $newestId , bookId = $bookId ," +
+                        " limit= $limit")
                 return@withContext emptyList()
             }
             val sentences = sentenceRepository.getSentenceByWordIds(ids).successOr(null)

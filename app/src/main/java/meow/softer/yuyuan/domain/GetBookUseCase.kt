@@ -9,7 +9,6 @@ import meow.softer.yuyuan.data.successOr
 import meow.softer.yuyuan.utils.debug
 import javax.inject.Inject
 
-
 class GetBookUseCase @Inject constructor(
     private val bookRepository: BookRepository,
     private val wordRepository: WordRepository
@@ -20,18 +19,15 @@ class GetBookUseCase @Inject constructor(
     suspend operator fun invoke(bookId: Int): BookInfo = coroutineScope {
         debug("get book invoked id = $bookId")
         // get in parallel
-        val nameJob = async { bookRepository.getBookById(bookId).successOr(null)?.bookTitle ?: "" }
-        val totalJob = async { wordRepository.getWordCountByBookId(bookId).successOr(1) }
-        val wordLearntJob = async { wordRepository.getWordLearntCountByBook(bookId).successOr(0) }
+        val name = async { bookRepository.getBookById(bookId).successOr(null)?.bookTitle ?: "" }
+        val total = async { wordRepository.getWordCountByBookId(bookId).successOr(1) }
+        val wordLearnt = async { wordRepository.getWordLearntCountByBook(bookId).successOr(0) }
 
-        val name = nameJob.await()
-        val wordLearnt = wordLearntJob.await()
-        val total = totalJob.await()
 
         BookInfo(
-            bookName = name,
-            learntWords = wordLearnt,
-            totalWords = total,
+            bookName = name.await(),
+            learntWords = wordLearnt.await(),
+            totalWords = total.await(),
             bookId = bookId
         )
     }
