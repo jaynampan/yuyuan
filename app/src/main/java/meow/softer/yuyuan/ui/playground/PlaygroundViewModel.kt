@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -113,7 +113,7 @@ class PlaygroundViewModel @Inject constructor(
         .map(PlaygroundViewModelState::toUiState)
         .stateIn(
             viewModelScope,
-            SharingStarted.Eagerly,
+            WhileSubscribed(5000),
             viewModelState.value.toUiState()
 
         )
