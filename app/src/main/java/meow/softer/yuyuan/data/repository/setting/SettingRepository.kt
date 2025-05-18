@@ -1,8 +1,11 @@
 package meow.softer.yuyuan.data.repository.setting
 
 import androidx.datastore.core.DataStore
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import meow.softer.yuyuan.YuyuanSetting
+import meow.softer.yuyuan.di.IoDispatcher
 import meow.softer.yuyuan.utils.debug
 import javax.inject.Inject
 
@@ -11,7 +14,8 @@ const val DefaultBookId = 1
 
 
 class SettingRepository @Inject constructor(
-    private val settings: DataStore<YuyuanSetting>
+    private val settings: DataStore<YuyuanSetting>,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ISettingRepository {
     /**
      * Get user's settings
@@ -19,17 +23,23 @@ class SettingRepository @Inject constructor(
      * Note the speed is in raw int32 format
      */
     override suspend fun getSettings(): YuyuanSetting {
-        setupSettings()
-        return settings.data.first()
+        return withContext(ioDispatcher) {
+            setupSettings()
+            settings.data.first()
+        }
+
     }
 
 
     override suspend fun setCurrentBookId(bookId: Int) {
-        settings.updateData { current ->
-            current.toBuilder()
-                .setCurrentBookId(bookId)
-                .build()
+        withContext(ioDispatcher) {
+            settings.updateData { current ->
+                current.toBuilder()
+                    .setCurrentBookId(bookId)
+                    .build()
+            }
         }
+
     }
 
     /**
@@ -37,11 +47,13 @@ class SettingRepository @Inject constructor(
      * @param audioSpeed real speed in float format
      */
     override suspend fun setCurrentAudioSpeed(audioSpeed: Float) {
-        val speed = (audioSpeed * 10 + 0.1).toInt()
-        settings.updateData { current ->
-            current.toBuilder()
-                .setCurrentSpeed(speed)
-                .build()
+        withContext(ioDispatcher) {
+            val speed = (audioSpeed * 10 + 0.1).toInt()
+            settings.updateData { current ->
+                current.toBuilder()
+                    .setCurrentSpeed(speed)
+                    .build()
+            }
         }
     }
 
@@ -49,15 +61,18 @@ class SettingRepository @Inject constructor(
      * Set up default values if not yet
      */
     override suspend fun setupSettings() {
-        if (settings.data.first().isSetup == 0) {
-            debug("setting repo: setupSettings")
-            setCurrentBookId(DefaultBookId)
-            setCurrentAudioSpeed(DefaultAudioSpeed)
-            settings.updateData { current ->
-                current.toBuilder()
-                    .setIsSetup(1)
-                    .build()
+        withContext(ioDispatcher) {
+            if (settings.data.first().isSetup == 0) {
+                debug("setting repo: setupSettings")
+                setCurrentBookId(DefaultBookId)
+                setCurrentAudioSpeed(DefaultAudioSpeed)
+                settings.updateData { current ->
+                    current.toBuilder()
+                        .setIsSetup(1)
+                        .build()
+                }
             }
         }
+
     }
 }

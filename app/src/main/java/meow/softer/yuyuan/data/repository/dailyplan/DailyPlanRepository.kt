@@ -3,7 +3,7 @@ package meow.softer.yuyuan.data.repository.dailyplan
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.local.dao.DailyPlanDao
 import meow.softer.yuyuan.data.local.entiity.DailyPlan
-import meow.softer.yuyuan.data.repository.runInBackground
+import meow.softer.yuyuan.data.repository.runBackgroundIO
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -11,15 +11,15 @@ class DailyPlanRepository @Inject constructor(
     private val dailyPlanDao: DailyPlanDao
 ) : IDailyPlanRepository {
     override suspend fun getAllPlans(): Result<List<DailyPlan>> {
-        return runInBackground { dailyPlanDao.getAll() }
+        return runBackgroundIO { dailyPlanDao.getAll() }
     }
 
     override suspend fun getPlansByUserId(userId: Int): Result<List<DailyPlan>> {
-        return runInBackground { dailyPlanDao.getByUserId(userId) }
+        return runBackgroundIO { dailyPlanDao.getByUserId(userId) }
     }
 
     override suspend fun getPlanById(id: Int): Result<DailyPlan> {
-        return runInBackground { dailyPlanDao.getById(id) }
+        return runBackgroundIO { dailyPlanDao.getById(id) }
     }
 
     override suspend fun create(date: ZonedDateTime, userId: Int): Result<DailyPlan> {
@@ -36,10 +36,10 @@ class DailyPlanRepository @Inject constructor(
     }
 
     override suspend fun clearAll(): Result<Unit> {
-        return runInBackground { dailyPlanDao.deleteAll() }
+        return runBackgroundIO { dailyPlanDao.deleteAll() }
     }
 
     override suspend fun clearByUserId(userId: Int): Result<Unit> {
-        return runInBackground { dailyPlanDao.deleteByUserId(userId) }
+        return runBackgroundIO { dailyPlanDao.deleteByUserId(userId) }
     }
 }

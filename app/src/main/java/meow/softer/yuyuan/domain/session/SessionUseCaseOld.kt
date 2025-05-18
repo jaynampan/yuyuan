@@ -12,7 +12,7 @@ import meow.softer.yuyuan.data.local.entiity.Sentence
 import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.data.repository.dailyplan.DailyPlanRepository
 import meow.softer.yuyuan.data.repository.dailyplanword.DailyPlanWordRepository
-import meow.softer.yuyuan.data.repository.runInBackground
+import meow.softer.yuyuan.data.repository.runBackgroundIO
 import meow.softer.yuyuan.data.repository.sentence.SentenceRepository
 import meow.softer.yuyuan.data.repository.media.SoundRepositoryOld
 import meow.softer.yuyuan.data.repository.user.UserRepository
@@ -56,7 +56,7 @@ class SessionUseCaseOld @Inject constructor(
     private var currentWordIdx = 0
 
     suspend fun preparePlan(): Result<DailyPlan> {
-        return runInBackground {
+        return runBackgroundIO {
             // get current user's id
             val currentUserId =1
 

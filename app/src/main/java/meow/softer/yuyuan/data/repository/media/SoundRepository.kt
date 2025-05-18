@@ -5,12 +5,14 @@ import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.exoplayer.ExoPlayer
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SoundRepository @Inject constructor(
-    context: Context
+    context: Context,
+    ioDispatcher: CoroutineDispatcher = Dispatchers.IO 
 ) {
     private var player: ExoPlayer = ExoPlayer.Builder(context).build()
     private var speed: Float = 1f

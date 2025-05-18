@@ -82,7 +82,9 @@ fun WriteScreen(
     }
 
 }
-
+//TODO: convert to native as js is not good enough at performance
+// Known issues: Start up at playground for first time would have white screen for a sec
+// as the webpage is loading
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebPage(

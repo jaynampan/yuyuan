@@ -8,8 +8,10 @@ import meow.softer.yuyuan.utils.debug
 /**
  * Specifically for repository's IO operations
  * Handles YuResult automatically with coroutine
+ *
+ * With Dispatchers.IO context
  */
-suspend fun <T> runInBackground(block: suspend () -> T): Result<T> {
+suspend fun <T> runBackgroundIO(block: suspend () -> T): Result<T> {
     return try {
         val result = withContext(Dispatchers.IO) { block() }
         Result.Success(result)
