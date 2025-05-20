@@ -18,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "meow.softer.yuyuan"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 2
         versionName = "0.0.2"
