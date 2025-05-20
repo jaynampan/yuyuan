@@ -1,12 +1,13 @@
 # Yuyuan - Learn Chinese
 
-Yuyuan(语缘) is an Android app for Chinese learning, especially words   
-This app can run on API 26(Android 8.0) or higher without network, all data is bundled in the apk
+Yuyuan(语缘) is an Android app for Chinese learning, especially words.   
+This app can run on API 26(Android 8.0) or higher without network, all data is bundled in the apk.
 file  
 **Note**: 🚧Under Construction... Welcome to find bugs and contribute!
 
 # Features
-- [x] Material 3 UI powered by Compose 
+
+- [x] Material 3 UI powered by Compose
 - [x] HSK1-6 all words included
 - [x] Character hand writing exercises
 - [ ] Daily learning plan
@@ -25,12 +26,13 @@ file
 
 # Build Notes
 
-- This project configures repository mirrors in settings.gradle.kts and
-  gradle/wrapper/gradle-wrapper.properties, in case for internet issues.
-- Inside gradle.properties, the gradle is set to be able to use 5GB RAM at most, adjust it according
-  to your local machine.
-- Inside gradle.properties, both configuration cache and build cache are enabled to speed up build
+- This project configures repository mirrors in *settings.gradle.kts* and
+  *gradle/wrapper/gradle-wrapper.properties*, in case for internet issues.
+- In *gradle.properties*, the gradle is set to use <u>5GB RAM</u> at most, adjust it according
+  to your local machine. And both configuration cache and build cache are enabled to speed up build
   process. Adjust the settings if you have incompatible issues and clear caches if it's corrupted.
+- Java toolchain version is set to 21, you can adjust it in app module's *build.gradle.kts* to
+  JVM that's >= 11 and compatible with gradle.
 
 
 
