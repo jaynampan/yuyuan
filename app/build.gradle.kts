@@ -11,8 +11,6 @@ plugins {
     alias(libs.plugins.google.protobuf)
 }
 
-
-
 android {
 
     namespace = "meow.softer.yuyuan"
@@ -66,69 +64,18 @@ android {
 
 }
 
-composeCompiler {
-    reportsDestination = layout.buildDirectory.dir("compose_compiler")
-    //stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("stability_config.conf"))
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
-dependencies {
-
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
-
-    // compose bill of material
-    val composeBom = platform(libs.compose.bom)
-    implementation(composeBom)
-    testImplementation(composeBom)
-    androidTestImplementation(composeBom)
-    debugImplementation(composeBom)
-
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(libs.ui.test.junit4)
-
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
-
-    //lib
-    implementation(libs.activity.ktx)
-    implementation(libs.constraintlayout.compose)
-    //Splash Screen
-    implementation(libs.core.splashscreen)
-    //Navigation
-    implementation(libs.navigation.compose)
-    // Hilt
-    implementation(libs.dagger.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    // Room
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
-    // optional - Test helpers
-    testImplementation(libs.room.testing)
-    // DataStore
-    implementation(libs.datastore)
-    implementation(libs.protobuf.javalite)
-    // ExoPlayer
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
-    implementation(libs.media3.common)
-    // desugaring
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
-
+// compose compiler options
+// reference: https://kotlinlang.org/docs/compose-compiler-options.html
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
+
 // might have lint warns
 protobuf {
     protoc {
@@ -150,7 +97,58 @@ protobuf {
 kapt {
     correctErrorTypes = true
 }
+
 // Set Room Schema export location
 room {
     schemaDirectory("$projectDir/schemas")
+}
+
+dependencies {
+    // compose bill of material
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
+    testImplementation(composeBom)
+    androidTestImplementation(composeBom)
+    debugImplementation(composeBom)
+
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(libs.activity.ktx)
+    implementation(libs.constraintlayout.compose)
+
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.ui.test.junit4)
+
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
+
+    // Splash Screen
+    implementation(libs.core.splashscreen)
+    // Navigation
+    implementation(libs.navigation.compose)
+    // Hilt
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    // Room
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    // optional - Test helpers
+    testImplementation(libs.room.testing)
+    // DataStore
+    implementation(libs.datastore)
+    implementation(libs.protobuf.javalite)
+    // ExoPlayer
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.ui)
+    implementation(libs.media3.common)
+    // desugaring
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
