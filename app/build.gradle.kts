@@ -117,10 +117,7 @@ dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.constraintlayout.compose)
 
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
+    implementation(libs.bundles.compose.ui)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -146,9 +143,7 @@ dependencies {
     implementation(libs.datastore)
     implementation(libs.protobuf.javalite)
     // ExoPlayer
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
-    implementation(libs.media3.common)
+    implementation(libs.bundles.media3)
     // desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
