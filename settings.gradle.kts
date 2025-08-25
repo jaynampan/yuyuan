@@ -3,12 +3,18 @@ pluginManagement {
         // Use AliYun mirrors if you have internet issues
         maven { url = uri("https://maven.aliyun.com/repository/public") }
         maven { url = uri("https://maven.aliyun.com/repository/google") }
-        maven { url = uri("https://maven.aliyun.com/repository/jcenter") }
         maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
         // End of mirrors
-        google()
-        mavenCentral()
         gradlePluginPortal()
+        google {
+            // Only look for Google-specific artifacts here
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
     }
 }
 
@@ -18,10 +24,15 @@ dependencyResolutionManagement {
         // Use AliYun mirrors if you have internet issues
         maven { url = uri("https://maven.aliyun.com/repository/public") }
         maven { url = uri("https://maven.aliyun.com/repository/google") }
-        maven { url = uri("https://maven.aliyun.com/repository/jcenter") }
-        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
         // End of mirrors
-        google()
+        google {
+            // Only look for Google-specific artifacts here
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
     }
 }

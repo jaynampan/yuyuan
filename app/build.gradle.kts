@@ -1,4 +1,6 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.google.protobuf.gradle.id
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
@@ -9,6 +11,8 @@ plugins {
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.google.protobuf)
+    // for checking dependency updates
+    alias(libs.plugins.dependency.updater)
 }
 
 android {
@@ -41,27 +45,28 @@ android {
         }
         debug {
             isMinifyEnabled = false
+            applicationIdSuffix = ".debug" // for installing release and debug builds side by side
+            versionNameSuffix = "-DEBUG"
         }
     }
+
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
 
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
-    }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 }
 
 java {
@@ -70,13 +75,13 @@ java {
     }
 }
 
-// compose compiler options
-// reference: https://kotlinlang.org/docs/compose-compiler-options.html
+// Configure compiler options
+// More details, visit https://kotlinlang.org/docs/compose-compiler-options.html
 composeCompiler {
     reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
-// might have lint warns
+// Configure the protobuf plugin, might have lint warns
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:4.30.2"
@@ -98,7 +103,7 @@ kapt {
     correctErrorTypes = true
 }
 
-// Set Room Schema export location
+// Configure Room Schema export location
 room {
     schemaDirectory("$projectDir/schemas")
 }
@@ -146,4 +151,18 @@ dependencies {
     implementation(libs.bundles.media3)
     // desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+}
+
+// Configure the dependencyUpdates gradle task to check for stable releases only
+// https://github.com/ben-manes/gradle-versions-plugin
+fun isNonStable(version: String): Boolean {
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
+    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+    val isStable = stableKeyword || regex.matches(version)
+    return isStable.not()
+}
+tasks.withType<DependencyUpdatesTask> {
+    rejectVersionIf {
+        isNonStable(candidate.version) && !isNonStable(currentVersion)
+    }
 }
