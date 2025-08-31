@@ -16,7 +16,7 @@ class GetHanziInfoUseCase @Inject constructor(
     private val wordStatusRepository: WordStatusRepository,
     private val wordRepository: WordRepository,
     private val sentenceRepository: SentenceRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
     suspend operator fun invoke(limit: Int, startIdx: Int = -1): List<HanziInfo> {
         //todo: might cause wrong data due to delay of book switching

@@ -15,7 +15,7 @@ const val DefaultBookId = 1
 
 class SettingRepository @Inject constructor(
     private val settings: DataStore<YuyuanSetting>,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ISettingRepository {
     /**
      * Get user's settings
