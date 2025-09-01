@@ -47,5 +47,4 @@ class MainActivity : ComponentActivity() {
         homeViewModel.initSharedViewModel(this)
         playgroundViewModel.initSharedViewModel(this)
     }
-
 }

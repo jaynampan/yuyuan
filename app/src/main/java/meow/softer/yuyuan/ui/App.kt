@@ -19,5 +19,4 @@ fun App(
         mainViewModel = mainViewModel,
         playgroundViewModel = playgroundViewModel
     )
-    val s: Int
 }
