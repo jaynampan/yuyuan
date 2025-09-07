@@ -118,16 +118,14 @@ fun WebPage(
         modifier = modifier.pointerInput(Unit) {
             onTap()
         },
-        update = {
+        update = { webview ->
             if(replay > 0){
                 val jsonFile = "char_json/$char.json"
                 val jsonContent =
-                    it.context.assets.open(jsonFile).bufferedReader().use { it.readText() }
+                    webview.context.assets.open(jsonFile).bufferedReader().use { it.readText() }
                 val jsCode = "javascript: animate(\"$char\",$jsonContent,$showMode);"
-                it.evaluateJavascript(jsCode, null)
+                webview.evaluateJavascript(jsCode, null)
             }
-
-
         }
     )
 }
