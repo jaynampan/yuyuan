@@ -10,13 +10,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import meow.softer.yuyuan.R
 import meow.softer.yuyuan.data.local.entiity.Book
 import meow.softer.yuyuan.domain.BookInfo
 import meow.softer.yuyuan.domain.GetBookUseCase
+import meow.softer.yuyuan.domain.GetSettingsUseCase
 import meow.softer.yuyuan.domain.UpdateSettingsUseCase
 import meow.softer.yuyuan.domain.UpdateSettingsUseCase.ConfigType
 import meow.softer.yuyuan.utils.ErrorMessage
 import meow.softer.yuyuan.utils.debug
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -44,9 +47,9 @@ sealed interface SettingUiStateRaw {
 }
 
 data class SettingViewModelState(
-    val currentBook: BookInfo? = null,
     val isLoading: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
+    val currentBook: BookInfo? = null,
     val audioSpeed: Float = 1f,
     val bookList: List<Book>? = null
 ) {
@@ -75,7 +78,8 @@ data class SettingViewModelState(
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val getBookUseCase: GetBookUseCase,
-    private val updateSettingsUseCase: UpdateSettingsUseCase
+    private val updateSettingsUseCase: UpdateSettingsUseCase,
+    private val getSettingsUseCase: GetSettingsUseCase
 ) : ViewModel() {
     private val viewModelState = MutableStateFlow(
         SettingViewModelState(isLoading = true)
@@ -94,7 +98,44 @@ class SettingViewModel @Inject constructor(
 
     init {
         debug("SettingVM init{}...")
+        initialize()
     }
+
+    private fun initialize() {
+        refresh()
+    }
+
+    fun refresh() {
+        viewModelState.update { it.copy(isLoading = true) }
+
+        // Fetch data from
+        viewModelScope.launch {
+            val userSetting = getSettingsUseCase()
+            val bookInfo = getBookUseCase(userSetting.currentBookId)
+            val bookList = getBookUseCase()
+            viewModelState.update {
+                if (userSetting.currentBookId != 0) {
+                    debug("UI has data $bookInfo  $userSetting")
+                    rawAudioSpeedCache = userSetting.currentAudioSpeed * 10
+                    it.copy(
+                        isLoading = false,
+                        currentBook = bookInfo,
+                        audioSpeed = userSetting.currentAudioSpeed,
+                        bookList = bookList,
+                    )
+
+                } else {
+                    debug("Cant get UI data")
+                    val errorMessages = it.errorMessages + ErrorMessage(
+                        id = UUID.randomUUID().mostSignificantBits,
+                        messageId = R.string.load_plan_info_err
+                    )
+                    it.copy(errorMessages = errorMessages, isLoading = false)
+                }
+            }
+        }
+    }
+
     fun onBookChosen(bookId: Int) {
         viewModelScope.launch {
             // update ui state
