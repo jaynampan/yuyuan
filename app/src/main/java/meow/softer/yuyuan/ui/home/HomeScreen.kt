@@ -17,6 +17,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import meow.softer.yuyuan.R
 import meow.softer.yuyuan.domain.BookInfo
@@ -39,6 +44,27 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
     onRouteClick: (String) -> Unit
 ) {
+    // refresh data on every resume for latest data
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val observer = rememberUpdatedState { event: Lifecycle.Event ->
+        // Handle screen visibility on lifecycle changes
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                homeViewModel.refresh()
+            }
+
+            else -> {}
+        }
+    }
+    DisposableEffect(lifecycleOwner) {
+        val lifecycleObserver = LifecycleEventObserver { _, event -> observer.value(event) }
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
     val mainUiState = homeViewModel.mainUiState.collectAsStateWithLifecycle()
     val homeUiState = when (mainUiState.value) {
         is HomeUiStateRaw.NoData -> null

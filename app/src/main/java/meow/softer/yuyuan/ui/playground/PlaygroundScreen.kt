@@ -38,12 +38,17 @@ fun PlaygroundScreen(
             onBack() // Navigate back
         }
     }
+    // Refresh to get latest data
     // Stop and release media player when this screen is disposed
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val observer = LifecycleEventObserver { _, event ->
         when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.invalidateCache()
+            }
+
             Lifecycle.Event.ON_STOP -> {
-                debug("ON_STOP")
+                debug("Play VM ON_STOP")
                 viewModel.stopAudio()
             }
 

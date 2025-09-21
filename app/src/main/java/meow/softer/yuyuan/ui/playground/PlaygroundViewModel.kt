@@ -89,8 +89,6 @@ class PlaygroundViewModel @Inject constructor(
     private val viewModelState = MutableStateFlow(
         PlaygroundViewModelState(isLoading = true)
     )
-//    private lateinit var sharedViewModel: SharedViewModel
-
     private var hanziPool = mutableListOf<HanziInfo>()
     private val cacheMax = 12
     private val cacheMin = 4
@@ -127,19 +125,6 @@ class PlaygroundViewModel @Inject constructor(
         }
 
     }
-
-//    fun initSharedViewModel(viewModelSoreOwner: ViewModelStoreOwner) {
-//        debug("PlayVM initSharedViewModel()...")
-//        sharedViewModel = ViewModelProvider(viewModelSoreOwner)[SharedViewModel::class]
-//        viewModelScope.launch {
-//            // listen to setting change from other view models
-//            sharedViewModel.currentBookStatus.collect { value ->
-//                if (value != -1) {
-//                    invalidateCache()
-//                }
-//            }
-//        }
-//    }
 
     fun playWordSound() {
         viewModelScope.launch {
@@ -179,7 +164,7 @@ class PlaygroundViewModel @Inject constructor(
     /**
      * Invalidate cache when user changes book
      */
-    private fun invalidateCache() {
+    fun invalidateCache() {
         hanziPool.clear()
         pushNextAction()
     }
@@ -234,7 +219,5 @@ class PlaygroundViewModel @Inject constructor(
         viewModelScope.launch {
             stopAudioUseCase()
         }
-
     }
-
 }
