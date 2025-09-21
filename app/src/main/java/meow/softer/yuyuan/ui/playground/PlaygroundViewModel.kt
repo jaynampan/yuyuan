@@ -1,8 +1,6 @@
 package meow.softer.yuyuan.ui.playground
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +17,6 @@ import meow.softer.yuyuan.domain.HanziInfo
 import meow.softer.yuyuan.domain.PlayHanziAudioUseCase
 import meow.softer.yuyuan.domain.SaveProgressUseCase
 import meow.softer.yuyuan.domain.StopAudioUseCase
-import meow.softer.yuyuan.ui.home.SharedViewModel
 import meow.softer.yuyuan.utils.ErrorMessage
 import meow.softer.yuyuan.utils.debug
 import javax.inject.Inject
@@ -92,7 +89,7 @@ class PlaygroundViewModel @Inject constructor(
     private val viewModelState = MutableStateFlow(
         PlaygroundViewModelState(isLoading = true)
     )
-    private lateinit var sharedViewModel: SharedViewModel
+//    private lateinit var sharedViewModel: SharedViewModel
 
     private var hanziPool = mutableListOf<HanziInfo>()
     private val cacheMax = 12
@@ -131,18 +128,18 @@ class PlaygroundViewModel @Inject constructor(
 
     }
 
-    fun initSharedViewModel(viewModelSoreOwner: ViewModelStoreOwner) {
-        debug("PlayVM initSharedViewModel()...")
-        sharedViewModel = ViewModelProvider(viewModelSoreOwner)[SharedViewModel::class]
-        viewModelScope.launch {
-            // listen to setting change from other view models
-            sharedViewModel.currentBookStatus.collect { value ->
-                if (value != -1) {
-                    invalidateCache()
-                }
-            }
-        }
-    }
+//    fun initSharedViewModel(viewModelSoreOwner: ViewModelStoreOwner) {
+//        debug("PlayVM initSharedViewModel()...")
+//        sharedViewModel = ViewModelProvider(viewModelSoreOwner)[SharedViewModel::class]
+//        viewModelScope.launch {
+//            // listen to setting change from other view models
+//            sharedViewModel.currentBookStatus.collect { value ->
+//                if (value != -1) {
+//                    invalidateCache()
+//                }
+//            }
+//        }
+//    }
 
     fun playWordSound() {
         viewModelScope.launch {
@@ -168,7 +165,8 @@ class PlaygroundViewModel @Inject constructor(
             debug("saving progress for $previousWord")
             val newLearnt = saveProgressUseCase(previousWord)
             if (newLearnt > 0) {
-                sharedViewModel.updateCurrentBookLearnt(newLearnt)
+//                sharedViewModel.updateCurrentBookLearnt(newLearnt)
+                //todo: update data
             } else {
                 //todo: display error
                 debug("saveProgress: newLearnt <= 0")

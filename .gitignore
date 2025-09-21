@@ -38,3 +38,6 @@ emu.bat
 # Project's Temp files
 /store/
 /.kotlin/
+
+# Temp files
+/temp/

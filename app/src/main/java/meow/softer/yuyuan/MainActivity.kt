@@ -14,7 +14,6 @@ import meow.softer.yuyuan.ui.App
 import meow.softer.yuyuan.ui.home.MainViewModel
 import meow.softer.yuyuan.ui.playground.PlaygroundViewModel
 import meow.softer.yuyuan.ui.theme.YuyuanTheme
-import meow.softer.yuyuan.utils.debug
 
 
 @AndroidEntryPoint
@@ -43,8 +42,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        debug("Main activity onStart this is called once!")
-        homeViewModel.initSharedViewModel(this)
-        playgroundViewModel.initSharedViewModel(this)
+//        debug("Main activity onStart this is called once!")
+//        homeViewModel.initSharedViewModel(this)
+//        playgroundViewModel.initSharedViewModel(this)
     }
 }

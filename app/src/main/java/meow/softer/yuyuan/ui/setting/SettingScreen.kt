@@ -37,8 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import meow.softer.yuyuan.R
 import meow.softer.yuyuan.data.local.entiity.Book
-import meow.softer.yuyuan.ui.home.MainUiState
-import meow.softer.yuyuan.ui.home.MainViewModel
 import meow.softer.yuyuan.ui.theme.onPrimaryContainerLight
 import meow.softer.yuyuan.ui.theme.primaryContainerLightMediumContrast
 import meow.softer.yuyuan.ui.theme.primaryLight
@@ -50,13 +48,13 @@ import meow.softer.yuyuan.utils.debug
 @Composable
 fun SettingScreen(
     onBack: () -> Unit,
-    mainViewModel: MainViewModel
+    viewModel: SettingViewModel
 ) {
-    val mainUiState = mainViewModel.mainUiState.collectAsStateWithLifecycle()
-    val settingUiState = when (mainUiState.value) {
-        is MainUiState.NoData -> null
-        is MainUiState.HasData -> {
-            val result = (mainUiState.value as MainUiState.HasData).settingUiState
+    val uiState = viewModel.settingUiStates.collectAsStateWithLifecycle()
+    val settingUiState = when (uiState.value) {
+        is SettingUiStateRaw.NoData -> null
+        is SettingUiStateRaw.HasData -> {
+            val result = (uiState.value as SettingUiStateRaw.HasData).settingUiState
             debug("speed = ${result.currentSpeed}")
             result
         }
@@ -65,12 +63,12 @@ fun SettingScreen(
     if (settingUiState != null) {
         SettingScreenContent(
             onBack = { onBack() },
-            onBookChosen = { mainViewModel.onBookChosen(it) },
-            onRawSpeedChange = { mainViewModel.onRawSpeedChange(it) },
+            onBookChosen = { viewModel.onBookChosen(it) },
+            onRawSpeedChange = { viewModel.onRawSpeedChange(it) },
             currentSpeed = settingUiState.currentSpeed,
             currentBookId = settingUiState.currentBookId,
             bookList = settingUiState.bookList,
-            onRawSpeedChosen = {mainViewModel.onRawSpeedChosen()}
+            onRawSpeedChosen = {viewModel.onRawSpeedChosen()}
         )
     } else {
         Box(

@@ -1,8 +1,6 @@
 package meow.softer.yuyuan.ui.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +14,6 @@ import meow.softer.yuyuan.data.local.entiity.Book
 import meow.softer.yuyuan.domain.BookInfo
 import meow.softer.yuyuan.domain.GetBookUseCase
 import meow.softer.yuyuan.domain.GetSettingsUseCase
-import meow.softer.yuyuan.domain.UpdateSettingsUseCase
-import meow.softer.yuyuan.domain.UpdateSettingsUseCase.ConfigType
 import meow.softer.yuyuan.utils.ErrorMessage
 import meow.softer.yuyuan.utils.debug
 import java.util.UUID
@@ -25,12 +21,6 @@ import javax.inject.Inject
 
 data class HomeUiState(
     val currentBook: BookInfo
-)
-
-data class SettingUiState(
-    val currentBookId: Int,
-    val bookList: List<Book>,
-    val currentSpeed: Float
 )
 
 /**
@@ -55,7 +45,6 @@ sealed interface MainUiState {
         override val isLoading: Boolean,
         override val errorMessages: List<ErrorMessage>,
         val homeUiState: HomeUiState,
-        val settingUiState: SettingUiState
     ) : MainUiState
 }
 
@@ -81,12 +70,8 @@ data class MainViewModelState(
                 errorMessages = errorMessages,
                 homeUiState = HomeUiState(
                     currentBook = currentBook
-                ),
-                settingUiState = SettingUiState(
-                    currentBookId = currentBook.bookId,
-                    bookList = bookList,
-                    currentSpeed = audioSpeed
                 )
+
             )
         } else {
             MainUiState.NoData(
@@ -103,9 +88,7 @@ data class MainViewModelState(
 class MainViewModel @Inject constructor(
     private val getBookUseCase: GetBookUseCase,
     private val getSettingsUseCase: GetSettingsUseCase,
-    private val updateSettingsUseCase: UpdateSettingsUseCase
 ) : ViewModel() {
-    private lateinit var sharedViewModel: SharedViewModel
     private val viewModelState = MutableStateFlow(
         MainViewModelState(isLoading = true)
     )
@@ -124,29 +107,6 @@ class MainViewModel @Inject constructor(
     init {
         debug("MainVM init{}...")
         initialize()
-    }
-
-    fun initSharedViewModel(viewModelSoreOwner: ViewModelStoreOwner) {
-        debug("MainVM initSharedViewModel...")
-        sharedViewModel = ViewModelProvider(viewModelSoreOwner)[SharedViewModel::class]
-        viewModelScope.launch {
-            // observe updates from other view models
-            sharedViewModel.currentBookLearnt.collect { value ->
-                debug("MainVM new learnt : collecting $value")
-                if (value != -1) {
-                    val bookInfo = viewModelState.value.currentBook
-                    if (bookInfo != null) {
-                        debug("newLearnt collected: $value")
-                        viewModelState.update {
-                            it.copy(
-                                currentBook = bookInfo.copy(learntWords = value)
-                            )
-                        }
-                    }
-
-                }
-            }
-        }
     }
 
     private fun initialize() {
@@ -191,39 +151,6 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun onBookChosen(bookId: Int) {
-        viewModelScope.launch {
-            // update ui state
-            viewModelState.update {
-                it.copy(
-                    currentBook = getBookUseCase(bookId)
-                )
-            }
-            // update setting
-            updateSettingsUseCase(ConfigType.CURRENT_BOOK, bookId)
-            // notify other view models
-            sharedViewModel.notifyCurrentBookChange(bookId)
-        }
-    }
-
-    fun onRawSpeedChosen() {
-        viewModelScope.launch {
-            val realSpeed = (rawAudioSpeedCache + 0.1).toInt() / 10f
-            // update ui state
-            viewModelState.update {
-                it.copy(
-                    audioSpeed = realSpeed
-                )
-            }
-            // update setting
-            updateSettingsUseCase(ConfigType.CURRENT_SPEED, realSpeed)
-        }
-    }
-
-    fun onRawSpeedChange(rawSpeed: Float) {
-        rawAudioSpeedCache = rawSpeed
     }
 }
 
