@@ -36,13 +36,13 @@ import meow.softer.yuyuan.ui.theme.primaryLight
 
 @Composable
 fun HomeScreen(
-    mainViewModel: MainViewModel,
+    homeViewModel: HomeViewModel,
     onRouteClick: (String) -> Unit
 ) {
-    val mainUiState = mainViewModel.mainUiState.collectAsStateWithLifecycle()
+    val mainUiState = homeViewModel.mainUiState.collectAsStateWithLifecycle()
     val homeUiState = when (mainUiState.value) {
-        is MainUiState.NoData -> null
-        is MainUiState.HasData -> (mainUiState.value as MainUiState.HasData).homeUiState
+        is HomeUiStateRaw.NoData -> null
+        is HomeUiStateRaw.HasData -> (mainUiState.value as HomeUiStateRaw.HasData).homeUiState
     }
     //TODO: loading
     if (homeUiState != null) {

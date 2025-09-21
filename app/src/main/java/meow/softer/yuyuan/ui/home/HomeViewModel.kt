@@ -26,7 +26,7 @@ data class HomeUiState(
 /**
  * UI state for the home
  */
-sealed interface MainUiState {
+sealed interface HomeUiStateRaw {
     val isLoading: Boolean
     val errorMessages: List<ErrorMessage>
 
@@ -36,7 +36,7 @@ sealed interface MainUiState {
     data class NoData(
         override val isLoading: Boolean,
         override val errorMessages: List<ErrorMessage>,
-    ) : MainUiState
+    ) : HomeUiStateRaw
 
     /**
      * The plan info data is loaded.
@@ -45,14 +45,14 @@ sealed interface MainUiState {
         override val isLoading: Boolean,
         override val errorMessages: List<ErrorMessage>,
         val homeUiState: HomeUiState,
-    ) : MainUiState
+    ) : HomeUiStateRaw
 }
 
 
 /**
  * An internal representation of the Home state, in a raw form
  */
-data class MainViewModelState(
+data class HomeViewModelState(
     val currentBook: BookInfo? = null,
     val isLoading: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
@@ -60,12 +60,12 @@ data class MainViewModelState(
     val bookList: List<Book>? = null
 ) {
     /**
-     * Converts this [MainViewModelState] into a more strongly typed [MainUiState] for driving
+     * Converts this [HomeViewModelState] into a more strongly typed [HomeUiStateRaw] for driving
      * the ui.
      */
-    fun toUiState(): MainUiState =
+    fun toUiState(): HomeUiStateRaw =
         if (currentBook != null && bookList != null && !isLoading) {
-            MainUiState.HasData(
+            HomeUiStateRaw.HasData(
                 isLoading = false,
                 errorMessages = errorMessages,
                 homeUiState = HomeUiState(
@@ -74,7 +74,7 @@ data class MainViewModelState(
 
             )
         } else {
-            MainUiState.NoData(
+            HomeUiStateRaw.NoData(
                 isLoading = isLoading,
                 errorMessages = errorMessages,
             )
@@ -85,19 +85,19 @@ data class MainViewModelState(
  * Main ViewModel that hold states for home
  */
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val getBookUseCase: GetBookUseCase,
     private val getSettingsUseCase: GetSettingsUseCase,
 ) : ViewModel() {
     private val viewModelState = MutableStateFlow(
-        MainViewModelState(isLoading = true)
+        HomeViewModelState(isLoading = true)
     )
 
     private var rawAudioSpeedCache: Float = 10f
 
     // UI state exposed to the UI
     val mainUiState = viewModelState
-        .map(MainViewModelState::toUiState)
+        .map(HomeViewModelState::toUiState)
         .stateIn(
             viewModelScope,
             WhileSubscribed(5000),
@@ -110,7 +110,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun initialize() {
-        debug("MainVM initialize...")
+        debug("Home VM initialize...")
         viewModelScope.launch {
             refresh()
         }
@@ -122,7 +122,7 @@ class MainViewModel @Inject constructor(
      */
     fun refresh() {
         // UI is refreshing
-        debug("MainVM UI Refreshing")
+        debug("Home VM UI Refreshing")
         viewModelState.update { it.copy(isLoading = true) }
 
         // Fetch data from

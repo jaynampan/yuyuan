@@ -7,19 +7,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import meow.softer.yuyuan.ui.home.HomeScreen
-import meow.softer.yuyuan.ui.home.MainViewModel
+import meow.softer.yuyuan.ui.home.HomeViewModel
 import meow.softer.yuyuan.ui.playground.PlaygroundScreen
 import meow.softer.yuyuan.ui.playground.PlaygroundViewModel
 import meow.softer.yuyuan.ui.playground.WriteScreen
 import meow.softer.yuyuan.ui.setting.SettingScreen
+import meow.softer.yuyuan.ui.setting.SettingViewModel
 
 
 @Composable
 fun YuyuanNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    mainViewModel: MainViewModel,
-    playgroundViewModel: PlaygroundViewModel
+    homeViewModel: HomeViewModel,
+    playgroundViewModel: PlaygroundViewModel,
+    settingViewModel: SettingViewModel
 ) {
     NavHost(
         navController = navController,
@@ -28,7 +30,7 @@ fun YuyuanNavHost(
     ) {
         composable(route = Home.route) {
             HomeScreen(
-                mainViewModel = mainViewModel,
+                homeViewModel = homeViewModel,
                 onRouteClick = { route ->
                     navController.navigateSingleTop(route)
                 }
@@ -51,7 +53,7 @@ fun YuyuanNavHost(
                 onBack = {
                     navController.navigateSingleTop(Home.route)
                 },
-                mainViewModel = mainViewModel
+                viewModel = settingViewModel
             )
         }
         composable(route = Write.route) {
