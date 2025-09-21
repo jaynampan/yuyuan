@@ -1,5 +1,5 @@
+
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import com.google.protobuf.gradle.id
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -10,13 +10,11 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.androidx.room)
-    alias(libs.plugins.google.protobuf)
     // for checking dependency updates
     alias(libs.plugins.dependency.updater)
 }
 
 android {
-
     namespace = "meow.softer.yuyuan"
     compileSdk = 36
 
@@ -24,8 +22,8 @@ android {
         applicationId = "meow.softer.yuyuan"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "0.0.2"
+        versionCode = 3
+        versionName = "0.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -81,23 +79,6 @@ composeCompiler {
     reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
-// Configure the protobuf plugin, might have lint warns
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:4.30.2"
-    }
-
-    generateProtoTasks {
-        all().forEach { task ->
-            task.builtins {
-                id("java") {
-                    option("lite")
-                }
-            }
-        }
-    }
-}
-
 // Allow references to generated code
 kapt {
     correctErrorTypes = true
@@ -145,8 +126,7 @@ dependencies {
     // optional - Test helpers
     testImplementation(libs.room.testing)
     // DataStore
-    implementation(libs.datastore)
-    implementation(libs.protobuf.javalite)
+    implementation(libs.datastore.preferences)
     // ExoPlayer
     implementation(libs.bundles.media3)
     // desugaring

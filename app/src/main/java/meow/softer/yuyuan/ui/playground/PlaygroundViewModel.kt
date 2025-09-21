@@ -183,4 +183,10 @@ class PlaygroundViewModel @Inject constructor(
             stopAudioUseCase()
         }
     }
+
+    fun refreshCache(){
+        hanziQueue.refreshCache()
+        viewModelState.update { it.copy(isLoading = true) }
+        pushNextAction()
+    }
 }
