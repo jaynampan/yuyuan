@@ -4,19 +4,22 @@ import meow.softer.yuyuan.domain.GetHanziInfoUseCase
 import meow.softer.yuyuan.domain.HanziInfo
 import javax.inject.Inject
 
-/**
- * Todo: add cache
- */
-class HanziQueue
-@Inject constructor(
+
+class HanziQueue @Inject constructor(
     private val getHanziInfoUseCase: GetHanziInfoUseCase
 ) {
+    private val cache = mutableListOf<HanziInfo>()
+    private val cacheSize = 4
 
     suspend fun getHead(): HanziInfo? {
-        val hanziInfos = getHanziInfoUseCase(1)
-        if (hanziInfos.isEmpty()){
-            return null
+        if (cache.isEmpty()) {
+            cache.addAll(getHanziInfoUseCase(cacheSize))
         }
-        return hanziInfos[0]
+
+        return cache.removeFirstOrNull()
+    }
+
+    fun refreshCache(){
+        cache.clear()
     }
 }
