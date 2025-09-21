@@ -17,44 +17,39 @@ class WordStatusRepository @Inject constructor(
         return runBackgroundIO { wordStatusDao.getAll() }
     }
 
-    override suspend fun getWordStatusByUser(userId: Int): Result<List<WordStatus>> {
-        return runBackgroundIO { wordStatusDao.getAllByUserId(userId) }
+
+
+    override suspend fun getWordStatusByWordId(wordId: Int): Result<WordStatus> {
+        return runBackgroundIO { wordStatusDao.getByWordId(wordId) }
     }
 
-
-    override suspend fun getWordStatusByWordId(wordId: Int, userId: Int): Result<WordStatus> {
-        return runBackgroundIO { wordStatusDao.getByWordId(wordId, userId) }
+    override suspend fun getWordStatusById(id: Int): Result<WordStatus> {
+        return runBackgroundIO { wordStatusDao.getById(id) }
     }
 
-    override suspend fun getWordStatusById(id: Int, userId: Int): Result<WordStatus> {
-        return runBackgroundIO { wordStatusDao.getById(id, userId) }
+    override suspend fun getLearntList(): Result<List<WordStatus>> {
+        return runBackgroundIO { wordStatusDao.getLearnt() }
     }
 
-    override suspend fun getLearntList(userId: Int): Result<List<WordStatus>> {
-        return runBackgroundIO { wordStatusDao.getLearnt(userId) }
-    }
-
-    override suspend fun getStarredList(userId: Int): Result<List<WordStatus>> {
-        return runBackgroundIO { wordStatusDao.getStarred(userId) }
+    override suspend fun getStarredList(): Result<List<WordStatus>> {
+        return runBackgroundIO { wordStatusDao.getStarred() }
     }
 
     override suspend fun getLearntListByDate(
         date: ZonedDateTime,
-        userId: Int
     ): Result<List<WordStatus>> {
-        return runBackgroundIO { wordStatusDao.getLearntByDate(date, userId) }
+        return runBackgroundIO { wordStatusDao.getLearntByDate(date) }
     }
 
     override suspend fun getLearntListByInterval(
         start: ZonedDateTime,
         end: ZonedDateTime,
-        userId: Int
     ): Result<List<WordStatus>> {
-        return runBackgroundIO { wordStatusDao.getLearntByInterval(start, end, userId) }
+        return runBackgroundIO { wordStatusDao.getLearntByInterval(start, end) }
     }
 
-    override suspend fun toggleStarred(word: Word, userId: Int): Result<Unit> {
-        return toggleStarredByWordId(word.id, userId)
+    override suspend fun toggleStarred(word: Word): Result<Unit> {
+        return toggleStarredByWordId(word.id)
     }
 
 
@@ -67,20 +62,20 @@ class WordStatusRepository @Inject constructor(
         return runBackgroundIO { wordStatusDao.toggleStarredByStatusId(wordStatusId) }
     }
 
-    override suspend fun toggleStarredByWordId(wordId: Int, userId: Int): Result<Unit> {
-        return runBackgroundIO { wordStatusDao.toggleStarred(wordId, userId) }
+    override suspend fun toggleStarredByWordId(wordId: Int): Result<Unit> {
+        return runBackgroundIO { wordStatusDao.toggleStarred(wordId) }
     }
 
-    override suspend fun setLearntByWordId(wordId: Int, userId: Int): Result<Unit> {
+    override suspend fun setLearntByWordId(wordId: Int): Result<Unit> {
         return runBackgroundIO {
             wordStatusDao.setLearntByWordId(
-                wordId, userId, dateTime = ZonedDateTime.now()
+                wordId, dateTime = ZonedDateTime.now()
             )
         }
     }
 
-    override suspend fun setLearnt(word: Word, userId: Int): Result<Unit> {
-        return setLearntByWordId(word.id, userId)
+    override suspend fun setLearnt(word: Word): Result<Unit> {
+        return setLearntByWordId(word.id)
     }
 
     override suspend fun setLearnt(wordStatus: WordStatus): Result<Unit> {
@@ -96,36 +91,38 @@ class WordStatusRepository @Inject constructor(
         }
     }
 
-    override suspend fun getNewWordList(limit: Int?, userId: Int): Result<List<WordStatus>> {
+
+
+    override suspend fun getNewWordList(limit: Int?): Result<List<WordStatus>> {
         return runBackgroundIO {
             if (limit == null) {
-                wordStatusDao.getAllNew(userId = userId)
+                wordStatusDao.getAllNew()
             } else {
-                wordStatusDao.getNewWithLimit(limit = limit, userId = userId)
+                wordStatusDao.getNewWithLimit(limit = limit)
             }
 
         }
     }
 
-    override suspend fun getRandomNewWordIds(limit: Int, userId: Int): Result<List<Int>> {
+    override suspend fun getRandomNewWordIds(limit: Int): Result<List<Int>> {
         return runBackgroundIO {
             if(limit <= 0){
                throw IllegalArgumentException("limit must be positive Int.")
             }
-            wordStatusDao.getRandomNewWordIds(limit = limit, userId = userId)
+            wordStatusDao.getRandomNewWordIds(limit = limit)
         }
     }
 
     override suspend fun getRandomNewWordIds(
         bookId: Int,
         limit: Int,
-        userId: Int
+
     ): Result<List<Int>> {
         return runBackgroundIO {
             if(bookId <= 0 || limit <= 0){
                 throw IllegalArgumentException("bookId and limit must be positive Int.")
             }
-            wordStatusDao.getRandomNewWordIdsByBook(bookId, limit, userId)
+            wordStatusDao.getRandomNewWordIdsByBook(bookId, limit)
         }
     }
 

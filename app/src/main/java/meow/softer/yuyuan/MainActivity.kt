@@ -11,17 +11,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import meow.softer.yuyuan.ui.App
-import meow.softer.yuyuan.ui.home.MainViewModel
+import meow.softer.yuyuan.ui.home.HomeViewModel
 import meow.softer.yuyuan.ui.playground.PlaygroundViewModel
+import meow.softer.yuyuan.ui.setting.SettingViewModel
 import meow.softer.yuyuan.ui.theme.YuyuanTheme
-import meow.softer.yuyuan.utils.debug
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val homeViewModel: MainViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
     private val playgroundViewModel: PlaygroundViewModel by viewModels()
+    private val settingViewModel: SettingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -33,19 +34,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.Companion.fillMaxSize()
                 ) {
                     App(
-                        mainViewModel = homeViewModel,
-                        playgroundViewModel = playgroundViewModel
+                        homeViewModel = homeViewModel,
+                        playgroundViewModel = playgroundViewModel,
+                        settingViewModel = settingViewModel
                     )
                 }
             }
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        debug("Main activity onStart this is called once!")
-        homeViewModel.initSharedViewModel(this)
-        playgroundViewModel.initSharedViewModel(this)
-    }
-
 }

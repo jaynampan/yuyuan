@@ -3,7 +3,6 @@ package meow.softer.yuyuan.data.repository.wordstatus
 import meow.softer.yuyuan.data.Result
 import meow.softer.yuyuan.data.local.entiity.Word
 import meow.softer.yuyuan.data.local.entiity.WordStatus
-import meow.softer.yuyuan.data.repository.dailyplan.DefaultUserId
 import java.time.ZonedDateTime
 
 /**
@@ -22,42 +21,34 @@ interface IWordStatusRepository {
     suspend fun getAllWordStatus(): Result<List<WordStatus>>
 
     /**
-     * Get all wordStatus of a user
-     */
-    suspend fun getWordStatusByUser(userId: Int = DefaultUserId): Result<List<WordStatus>>
-
-    /**
      * Get a single word's wordStatus by wordId
      */
     suspend fun getWordStatusByWordId(
-        wordId: Int,
-        userId: Int = DefaultUserId
+        wordId: Int
     ): Result<WordStatus>
 
     /**
      * Get a single wordStatus by wordStatus' id
      */
     suspend fun getWordStatusById(
-        id: Int,
-        userId: Int = DefaultUserId
+        id: Int
     ): Result<WordStatus>
 
     /**
      * Get learnt words' wordStatus list
      */
-    suspend fun getLearntList(userId: Int = DefaultUserId): Result<List<WordStatus>>
+    suspend fun getLearntList(): Result<List<WordStatus>>
 
     /**
      * Get starred words' wordStatus list
      */
-    suspend fun getStarredList(userId: Int = DefaultUserId): Result<List<WordStatus>>
+    suspend fun getStarredList(): Result<List<WordStatus>>
 
     /**
      * Get learnt words' wordStatus in a day
      */
     suspend fun getLearntListByDate(
-        date: ZonedDateTime,
-        userId: Int = DefaultUserId
+        date: ZonedDateTime
     ): Result<List<WordStatus>>
 
     /**
@@ -65,8 +56,7 @@ interface IWordStatusRepository {
      */
     suspend fun getLearntListByInterval(
         start: ZonedDateTime,
-        end: ZonedDateTime,
-        userId: Int = DefaultUserId
+        end: ZonedDateTime
     ): Result<List<WordStatus>>
 
 
@@ -74,7 +64,7 @@ interface IWordStatusRepository {
      * Update the word's starred status
      * By word, needs userId too
      */
-    suspend fun toggleStarred(word: Word, userId: Int = DefaultUserId): Result<Unit>
+    suspend fun toggleStarred(word: Word): Result<Unit>
 
     /**
      * Update the word's starred status
@@ -92,19 +82,19 @@ interface IWordStatusRepository {
      * Update the word's starred status
      * By wordId, needs userId too
      */
-    suspend fun toggleStarredByWordId(wordId: Int, userId: Int = DefaultUserId): Result<Unit>
+    suspend fun toggleStarredByWordId(wordId: Int): Result<Unit>
 
     /**
      * Set word to learnt with current dateTime
      * By wordId, needs userId too
      */
-    suspend fun setLearntByWordId(wordId: Int, userId: Int = DefaultUserId): Result<Unit>
+    suspend fun setLearntByWordId(wordId: Int): Result<Unit>
 
     /**
      * Set word to learnt with current dateTime
      * By word, needs userId too
      */
-    suspend fun setLearnt(word: Word, userId: Int = DefaultUserId): Result<Unit>
+    suspend fun setLearnt(word: Word): Result<Unit>
 
     /**
      * Set word to learnt with current dateTime
@@ -124,8 +114,7 @@ interface IWordStatusRepository {
      * get all by default
      */
     suspend fun getNewWordList(
-        limit: Int? = null,
-        userId: Int = DefaultUserId
+        limit: Int? = null
     ): Result<List<WordStatus>>
 
     /**
@@ -135,7 +124,7 @@ interface IWordStatusRepository {
      */
     suspend fun getRandomNewWordIds(
         limit: Int,
-        userId: Int = DefaultUserId
+
     ): Result<List<Int>>
 
     /**
@@ -144,7 +133,6 @@ interface IWordStatusRepository {
     suspend fun getRandomNewWordIds(
         bookId: Int,
         limit: Int,
-        userId: Int = DefaultUserId
     ): Result<List<Int>>
 
 }

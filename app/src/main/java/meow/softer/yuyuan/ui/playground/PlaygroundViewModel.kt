@@ -1,8 +1,6 @@
 package meow.softer.yuyuan.ui.playground
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,12 +12,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import meow.softer.yuyuan.data.local.entiity.Sentence
 import meow.softer.yuyuan.data.local.entiity.Word
-import meow.softer.yuyuan.domain.GetHanziInfoUseCase
 import meow.softer.yuyuan.domain.HanziInfo
 import meow.softer.yuyuan.domain.PlayHanziAudioUseCase
 import meow.softer.yuyuan.domain.SaveProgressUseCase
 import meow.softer.yuyuan.domain.StopAudioUseCase
-import meow.softer.yuyuan.ui.home.SharedViewModel
 import meow.softer.yuyuan.utils.ErrorMessage
 import meow.softer.yuyuan.utils.debug
 import javax.inject.Inject
@@ -84,22 +80,13 @@ data class PlaygroundViewModelState(
 @HiltViewModel
 class PlaygroundViewModel @Inject constructor(
     private val saveProgressUseCase: SaveProgressUseCase,
-    private val getHanziInfoUseCase: GetHanziInfoUseCase,
     private val playHanziAudioUseCase: PlayHanziAudioUseCase,
     private val stopAudioUseCase: StopAudioUseCase,
-
+    private val hanziQueue: HanziQueue
     ) : ViewModel() {
     private val viewModelState = MutableStateFlow(
         PlaygroundViewModelState(isLoading = true)
     )
-    private lateinit var sharedViewModel: SharedViewModel
-
-    private var hanziPool = mutableListOf<HanziInfo>()
-    private val cacheMax = 12
-    private val cacheMin = 4
-    private var latestCachedId = -1
-    private var isAtEnd = false
-
 
     /**
      * There are two cases to navigate back: user clicks the back arrow or the words are all learnt.
@@ -131,19 +118,6 @@ class PlaygroundViewModel @Inject constructor(
 
     }
 
-    fun initSharedViewModel(viewModelSoreOwner: ViewModelStoreOwner) {
-        debug("PlayVM initSharedViewModel()...")
-        sharedViewModel = ViewModelProvider(viewModelSoreOwner)[SharedViewModel::class]
-        viewModelScope.launch {
-            // listen to setting change from other view models
-            sharedViewModel.currentBookStatus.collect { value ->
-                if (value != -1) {
-                    invalidateCache()
-                }
-            }
-        }
-    }
-
     fun playWordSound() {
         viewModelScope.launch {
             playHanziAudioUseCase(viewModelState.value.currentWord!!)
@@ -158,8 +132,8 @@ class PlaygroundViewModel @Inject constructor(
 
     fun onNextClick() {
         val previousWord = viewModelState.value.currentWord
-        pushNextAction()
         saveProgress(previousWord)
+        pushNextAction()
     }
 
     private fun saveProgress(previousWord: Word?) {
@@ -168,57 +142,29 @@ class PlaygroundViewModel @Inject constructor(
             debug("saving progress for $previousWord")
             val newLearnt = saveProgressUseCase(previousWord)
             if (newLearnt > 0) {
-                sharedViewModel.updateCurrentBookLearnt(newLearnt)
+                //todo: update data
             } else {
                 //todo: display error
-                debug("saveProgress: newLearnt <= 0")
+                debug("Error: saveProgress: newLearnt <= 0")
             }
 
         }
 
     }
-
-    /**
-     * Invalidate cache when user changes book
-     */
-    private fun invalidateCache() {
-        hanziPool.clear()
-        pushNextAction()
-    }
-
-    private suspend fun refillCache() {
-        debug("refilling cache...")
-        if (isAtEnd) return
-        if (hanziPool.size <= cacheMin) {
-            val newCache = getHanziInfoUseCase(cacheMax - hanziPool.size, latestCachedId)
-            latestCachedId = newCache.maxOfOrNull { it.word.id } ?: -1
-            if (newCache.isEmpty()) {
-                // issue: fast switching book would cause delay, resulting in empty cache when not at end
-                // todo: fix it in a more elegant way
-
-                isAtEnd = true
-            } else {
-                hanziPool = hanziPool.plus(newCache) as MutableList<HanziInfo>
-                debug("refilled, size = ${hanziPool.size}")
-            }
-        }
-    }
-
 
     fun pushNextAction() {
         viewModelScope.launch {
             // check end
-            refillCache()
-            if (isAtEnd) {
+            val nextHanzi = hanziQueue.getHead()
+            debug("result is : "+nextHanzi?.word?.character)
+            if (nextHanzi ==null){
                 // reached end of book
                 debug("playVM is at end now")
                 _navigateBack.value = true //todo : reset?
                 stopAudio()
                 return@launch
-
             }
             //not end, push next
-            val nextHanzi = hanziPool.removeAt(0)
             viewModelState.update {
                 it.copy(
                     isLoading = false,
@@ -236,7 +182,5 @@ class PlaygroundViewModel @Inject constructor(
         viewModelScope.launch {
             stopAudioUseCase()
         }
-
     }
-
 }
