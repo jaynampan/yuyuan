@@ -43,10 +43,6 @@ fun PlaygroundScreen(
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val observer = LifecycleEventObserver { _, event ->
         when (event) {
-            Lifecycle.Event.ON_RESUME -> {
-                viewModel.invalidateCache()
-            }
-
             Lifecycle.Event.ON_STOP -> {
                 debug("Play VM ON_STOP")
                 viewModel.stopAudio()
