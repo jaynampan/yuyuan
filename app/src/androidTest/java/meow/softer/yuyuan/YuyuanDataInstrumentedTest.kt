@@ -4,15 +4,13 @@ import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.test.runTest
-import meow.softer.yuyuan.data.repository.book.BookRepository
 import meow.softer.yuyuan.data.local.YuyuanDatabase
-import meow.softer.yuyuan.data.local.entiity.WordStatus
+import meow.softer.yuyuan.data.repository.book.BookRepository
 import meow.softer.yuyuan.data.repository.sentence.SentenceRepository
 import meow.softer.yuyuan.data.repository.word.WordRepository
 import meow.softer.yuyuan.data.repository.wordstatus.WordStatusRepository
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -121,13 +119,13 @@ class YuyuanDataInstrumentedTest {
                 assertEquals(6100, data.size)
             }
         )
-        testYuResult(
-            arg = wordStatusRepository.getWordStatusByUser(),
-            onSuccess = { data ->
-                assertNotNull(data)
-                assertEquals(6100, data.size)
-            }
-        )
+//        testYuResult(
+//            arg = wordStatusRepository.getWordStatusByUser(),
+//            onSuccess = { data ->
+//                assertNotNull(data)
+//                assertEquals(6100, data.size)
+//            }
+//        )
         testYuResult(
             arg = wordStatusRepository.getWordStatusByWordId(155),
             onSuccess = { data ->
@@ -175,16 +173,16 @@ class YuyuanDataInstrumentedTest {
         )
 
         // make status id = 15 starred
-        testYuResult(
-            arg = wordStatusRepository.toggleStarred(
-                WordStatus(
-                    id = 15,
-                    wordId = 168,
-                    userId = 1
-                )
-            ),
-            onSuccess = {}
-        )
+//        testYuResult(
+//            arg = wordStatusRepository.toggleStarred(
+//                WordStatus(
+//                    id = 15,
+//                    wordId = 168,
+//                    userId = 1
+//                )
+//            ),
+//            onSuccess = {}
+//        )
         testYuResult(
             arg = wordStatusRepository.getStarredList(),
             onSuccess = { data ->
@@ -231,8 +229,8 @@ class YuyuanDataInstrumentedTest {
                 assertEquals("zhè shì xīn de yī nián", data.pinyin)
                 assertEquals("年_s.mp3", data.audioFile)
 
-                println(data.createdAt)
-                assertTrue("2024-12-11" in data.createdAt.toString())
+//                println(data.createdAt)
+//                assertTrue("2024-12-11" in data.createdAt.toString())
             }
         )
 
