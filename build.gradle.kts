@@ -5,6 +5,4 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.devtools.ksp) apply false
-    // for checking dependency updates
-    alias(libs.plugins.dependency.updater) apply false
 }

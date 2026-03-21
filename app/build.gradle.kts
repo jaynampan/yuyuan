@@ -1,17 +1,13 @@
 
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-//    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.androidx.room)
-    // for checking dependency updates
-    alias(libs.plugins.dependency.updater)
 }
 
 android {
@@ -79,11 +75,6 @@ composeCompiler {
     reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
-// Allow references to generated code
-//kapt {
-//    correctErrorTypes = true
-//}
-
 // Configure Room Schema export location
 room {
     schemaDirectory("$projectDir/schemas")
@@ -131,18 +122,4 @@ dependencies {
     implementation(libs.bundles.media3)
     // desugaring
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-}
-
-// Configure the dependencyUpdates gradle task to check for stable releases only
-// https://github.com/ben-manes/gradle-versions-plugin
-fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
-    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
-    val isStable = stableKeyword || regex.matches(version)
-    return isStable.not()
-}
-tasks.withType<DependencyUpdatesTask> {
-    rejectVersionIf {
-        isNonStable(candidate.version) && !isNonStable(currentVersion)
-    }
 }
