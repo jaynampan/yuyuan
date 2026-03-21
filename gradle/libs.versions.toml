@@ -1,22 +1,22 @@
 [versions]
-activityCompose = "1.11.0"
-composeBom = "2025.09.00"
+activityCompose = "1.12.2"
+composeBom = "2026.01.00"
 constraintlayoutCompose = "1.1.1"
 coreKtx = "1.17.0"
-coreSplashscreen = "1.2.0-rc01"
-datastore = "1.1.7"
+coreSplashscreen = "1.2.0"
+datastore = "1.2.0"
 desugar_jdk_libs = "2.1.5"
 espressoCore = "3.7.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 lifecycleRuntimeKtx = "2.9.4"
-androidGradlePlugin = "8.13.0"
+androidGradlePlugin = "9.1.0"
 media3 = "1.8.0"
 navigationCompose = "2.9.5"
-hilt = "2.57.2"
-room = "2.8.2"
-kotlin = "2.2.20"
-ksp = "2.2.20-2.0.4"  # ksp should match major version with kotlin
+hilt = "2.59"
+room = "2.8.4"
+kotlin = "2.3.0"
+ksp = "2.3.2"  # ksp should match major version with kotlin
 dependencyUpdater =  "0.53.0"
 
 [libraries]
@@ -35,6 +35,7 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 junit = { module = "junit:junit", version.ref = "junit" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 material3 = { module = "androidx.compose.material3:material3" }
+material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 media3-common = { module = "androidx.media3:media3-common", version.ref = "media3" }
 media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
@@ -51,7 +52,7 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
 [bundles]
 media3 = ["media3-common","media3-exoplayer", "media3-ui"]
-compose-ui = ["ui", "ui-graphics","ui-tooling-preview", "material3"]
+compose-ui = ["ui", "ui-graphics","ui-tooling-preview", "material3", "material-icons-extended"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -64,4 +65,3 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 androidx-room = { id = "androidx.room", version.ref = "room" }
 dependency-updater = {id = "com.github.ben-manes.versions",version.ref = "dependencyUpdater"}
-

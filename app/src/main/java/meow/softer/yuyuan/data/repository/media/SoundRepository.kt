@@ -31,7 +31,7 @@ class SoundRepository @Inject constructor(
             player.setMediaItems(uris.map { MediaItem.fromUri(it) })
             // Prepare the player.
             player.prepare()
-            player.playbackParameters = PlaybackParameters.DEFAULT.also { it.speed = speed }
+            player.playbackParameters = PlaybackParameters(speed)
             // Start the playback.
             player.play()
         }

@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+//    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools.ksp)
@@ -80,9 +80,9 @@ composeCompiler {
 }
 
 // Allow references to generated code
-kapt {
-    correctErrorTypes = true
-}
+//kapt {
+//    correctErrorTypes = true
+//}
 
 // Configure Room Schema export location
 room {
@@ -119,7 +119,7 @@ dependencies {
     implementation(libs.navigation.compose)
     // Hilt
     implementation(libs.dagger.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
     // Room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
